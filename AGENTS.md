@@ -1,4 +1,4 @@
-# CGJ2026 — Claude Code Project Notes
+# CGJ2026 - Codex Project Notes
 
 - **Engine:** Godot 4.7, Jolt Physics, Forward Plus renderer
 - **Team:** 2 technical + 2 art members
@@ -17,6 +17,10 @@ Agents should read this GDD whenever implementing or reviewing gameplay, UI, sce
 ```bash
 lark-cli docs +fetch --doc C54QdoaCko2b6wxtNDpcp385nQb --format json
 ```
+
+## Testing workflow
+
+Before testing new gameplay, UI, scene, physics, or node logic features, agents should first check `docs/testing/new-feature-testing.md`. Use it to plan what needs to be tested, what pre-work is required, how to add temporary logs, how to build a focused debug scene, and how to verify behavior by running the scene and inspecting logs.
 
 ## Git workflow
 
