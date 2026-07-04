@@ -135,6 +135,7 @@ class ProjectStructureTest(unittest.TestCase):
             "debug/OutOfBoundsRespawnTest.tscn",
             "debug/NPCRescueRegression.tscn",
             "debug/CrewVisualRegression.tscn",
+            "debug/ScoreRewardsRegression.tscn",
             "debug/anchor_throw_regression.gd",
             "debug/anchor_throw_regression.gd.uid",
             "debug/anchor_relative_launch_velocity_regression.gd",
@@ -153,8 +154,78 @@ class ProjectStructureTest(unittest.TestCase):
             "debug/npc_rescue_regression.gd.uid",
             "debug/crew_visual_regression.gd",
             "debug/crew_visual_regression.gd.uid",
+            "debug/score_rewards_regression.gd",
         ]:
             self.assertTrue((ROOT / relative_path).is_file(), relative_path)
+
+    def test_game_state_has_central_reward_api(self):
+        script = self.read("scripts/autoload/GameState.gd")
+
+        for expected in [
+            "const COIN_SCORE_VALUE: int = 10",
+            "const RESCUE_SCORE_VALUE: int = 100",
+            "const TRICK_360_SCORE_VALUE: int = 250",
+            "func award_coin_pickup(amount: int = 1) -> void:",
+            "if amount <= 0:",
+            "add_coin(amount)",
+            "add_score(amount * COIN_SCORE_VALUE)",
+            "func award_rescue(amount: int = 1) -> void:",
+            "add_rescued(amount)",
+            "add_score(amount * RESCUE_SCORE_VALUE)",
+            "func award_trick(trick_name: String, amount: int) -> void:",
+            "if trick_name.is_empty():",
+            "add_score(amount)",
+        ]:
+            self.assertIn(expected, script)
+
+    def test_pickups_and_rescues_award_score_rewards(self):
+        can_script = self.read("scripts/items/can_collectible.gd")
+        rescue_script = self.read("scripts/characters/npc_rescue.gd")
+
+        for expected in [
+            "GameState.award_coin_pickup(value)",
+            "queue_free()",
+        ]:
+            self.assertIn(expected, can_script)
+
+        for expected in [
+            "body.gain_crew(rescue_value)",
+            "GameState.award_rescue(rescue_value)",
+            "_rescued = true",
+        ]:
+            self.assertIn(expected, rescue_script)
+
+    def test_boat_tracks_and_awards_safe_landed_360_trick(self):
+        boat_script = self.read("scripts/player/boat.gd")
+        water_script = self.read("scripts/level_parts/water_surface.gd")
+
+        for expected in [
+            "const TRICK_FULL_ROTATION_RADIANS: float = TAU",
+            "const TRICK_360_NAME: String = \"360\"",
+            "var _airborne_rotation_total: float = 0.0",
+            "var _last_trick_rotation: float = 0.0",
+            "var _pending_360_tricks: int = 0",
+            "var _was_tracking_airborne_trick: bool = false",
+            "_update_airborne_trick_tracking()",
+            "func on_safe_landing(landing_angle_degrees: float, water_surface: Node2D) -> void:",
+            "GameState.award_trick(TRICK_360_NAME, GameState.TRICK_360_SCORE_VALUE)",
+            "func _reset_trick_tracking() -> void:",
+        ]:
+            self.assertIn(expected, boat_script)
+
+        for expected in [
+            "if body.has_method(\"on_safe_landing\"):",
+            "body.on_safe_landing(landing_angle, self)",
+        ]:
+            self.assertIn(expected, water_script)
+
+        bad_landing_start = boat_script.index("func on_bad_landing")
+        bad_landing_end = boat_script.index("func on_safe_landing", bad_landing_start)
+        bad_landing_section = boat_script[bad_landing_start:bad_landing_end]
+        self.assertLess(
+            bad_landing_section.index("\t_reset_trick_tracking()"),
+            bad_landing_section.index("if water_surface == _last_bad_landing_water:"),
+        )
 
     def test_scene_script_references_are_present(self):
         expected_references = {
@@ -183,10 +254,33 @@ class ProjectStructureTest(unittest.TestCase):
             "debug/OutOfBoundsRespawnTest.tscn": "res://debug/out_of_bounds_respawn_test.gd",
             "debug/NPCRescueRegression.tscn": "res://debug/npc_rescue_regression.gd",
             "debug/CrewVisualRegression.tscn": "res://debug/crew_visual_regression.gd",
+            "debug/ScoreRewardsRegression.tscn": "res://debug/score_rewards_regression.gd",
         }
 
         for scene_path, script_path in expected_references.items():
             self.assertIn(script_path, self.read(scene_path))
+
+    def test_can_collectible_adds_collected_value_to_game_state(self):
+        script = self.read("scripts/items/can_collectible.gd")
+        collect_branch = script[script.index('if body.is_in_group("boats"):'):]
+
+        self.assertIn("GameState.award_coin_pickup(value)", collect_branch)
+        self.assertIn("collected.emit(value)", collect_branch)
+        self.assertIn("queue_free()", collect_branch)
+
+    def test_can_collectible_uses_coin_animation_frames(self):
+        scene = self.read("scenes/items/CanCollectible.tscn")
+
+        self.assertIn('[node name="Visual" type="AnimatedSprite2D" parent="."]', scene)
+        self.assertIn('[sub_resource type="SpriteFrames"', scene)
+        self.assertIn('autoplay = "default"', scene)
+        self.assertNotIn('[node name="Visual" type="Polygon2D" parent="."]', scene)
+
+        for frame_index in range(1, 23):
+            self.assertIn(
+                f"res://assets/art/Character Prop Assets/coin/{frame_index:04}.png",
+                scene,
+            )
 
     def test_character_prop_art_is_bound_to_gameplay_scenes(self):
         anchor_scene = self.read("scenes/mechanics/Anchor.tscn")
@@ -886,17 +980,18 @@ class ProjectStructureTest(unittest.TestCase):
             self.assertIn(expected, npc_scene)
 
         for expected in [
-            "name=\"CrewLabel\"",
-            "text = \"Crew: 3/5\"",
+            "name=\"RescuedLabel\"",
+            "text = \"15/13\"",
         ]:
             self.assertIn(expected, hud_scene)
 
         for expected in [
-            "@onready var crew_label: Label = %CrewLabel",
-            "EventBus.player_spawned.connect(_on_player_spawned)",
-            "boat.crew_count_changed.connect(_on_crew_count_changed)",
-            "crew_label.text = \"Crew: %d/%d\"",
-            "boat.max_crew_count",
+            "@onready var rescued_label: Label = %RescuedLabel",
+            "GameState.rescued_changed.connect(_on_rescued_changed)",
+            "_on_rescued_changed(GameState.rescued_count, GameState.rescued_target)",
+            "func _on_rescued_changed(count: int, target: int) -> void:",
+            "rescued_label.text = \"%d/%d\"",
+            "func update_rescued(count: int, target: int) -> void:",
         ]:
             self.assertIn(expected, hud_script)
 

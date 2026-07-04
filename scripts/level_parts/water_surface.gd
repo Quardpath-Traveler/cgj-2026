@@ -161,6 +161,8 @@ func _on_body_entered(body: Node2D) -> void:
 				body.on_bad_landing(landing_angle, target_rotation, self)
 			boat_bad_landing.emit(body, landing_angle, target_rotation, self)
 		else:
+			if body.has_method("on_safe_landing"):
+				body.on_safe_landing(landing_angle, self)
 			boat_landed_safely.emit(body, landing_angle)
 
 
