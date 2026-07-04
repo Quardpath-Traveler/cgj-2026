@@ -11,7 +11,7 @@ signal boat_exited(boat: Node2D)
 ## Emitted when a boat enters the water within the safe landing angle.
 signal boat_landed_safely(boat: Node2D, landing_angle_degrees: float)
 ## Emitted when a boat enters the water above the safe landing angle.
-signal boat_bad_landing(boat: Node2D, landing_angle_degrees: float)
+signal boat_bad_landing(boat: Node2D, landing_angle_degrees: float, target_rotation: float, water_surface: Node2D)
 
 ## Maximum absolute boat rotation, in degrees, that counts as a safe landing.
 @export_range(0.0, 180.0, 1.0) var safe_landing_angle_degrees: float = 35.0
@@ -43,8 +43,6 @@ signal boat_bad_landing(boat: Node2D, landing_angle_degrees: float)
 @export var buoyancy_damping: float = 10.0
 ## One-time upward impulse applied when a rigid boat enters the water.
 @export var fountain_impulse: float = 360.0
-## Crew loss applied when a boat lands above the safe angle.
-@export var unsafe_landing_crew_loss: int = 1
 ## Enables the edge waterfall visual and downward edge force.
 @export var enable_waterfall: bool = true
 ## Waterfall edge side in local space: positive for right, negative for left.
@@ -139,9 +137,10 @@ func _on_body_entered(body: Node2D) -> void:
 		_apply_entry_impulse(body)
 
 		if landing_angle > safe_landing_angle_degrees:
-			if body.has_method("lose_crew"):
-				body.lose_crew(unsafe_landing_crew_loss)
-			boat_bad_landing.emit(body, landing_angle)
+			var target_rotation := get_boat_target_rotation()
+			if body.has_method("on_bad_landing"):
+				body.on_bad_landing(landing_angle, target_rotation, self)
+			boat_bad_landing.emit(body, landing_angle, target_rotation, self)
 		else:
 			boat_landed_safely.emit(body, landing_angle)
 
@@ -154,8 +153,8 @@ func _on_body_exited(body: Node2D) -> void:
 
 ## Returns the boat's absolute global rotation, normalized to 0-180 degrees.
 func get_landing_angle_degrees(body: Node2D) -> float:
-	var normalized_rotation := wrapf(body.global_rotation, -PI, PI)
-	return absf(rad_to_deg(normalized_rotation))
+	var relative_rotation := wrapf(body.global_rotation - get_boat_target_rotation(), -PI, PI)
+	return absf(rad_to_deg(relative_rotation))
 
 
 ## Returns how far a global point is below the animated surface.
