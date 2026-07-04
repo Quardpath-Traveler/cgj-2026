@@ -12,13 +12,17 @@ class ProjectStructureTest(unittest.TestCase):
     def test_project_has_main_scene_autoloads_and_input_actions(self):
         project = self.read("project.godot")
 
-        self.assertTrue(
-            'run/main_scene="res://scenes/main/Main.tscn"' in project
-            or 'run/main_scene="uid://c0hl712jsx7pn"' in project
-        )
         self.assertIn('GameState="*res://scripts/autoload/GameState.gd"', project)
         self.assertIn('EventBus="*res://scripts/autoload/EventBus.gd"', project)
         self.assertIn('SceneLoader="*res://scripts/autoload/SceneLoader.gd"', project)
+
+        # Main scene can be referenced by path or UID (Godot 4.7 supports both)
+        main_scene_line = next(line for line in project.splitlines() if line.startswith('run/main_scene='))
+        self.assertTrue(
+            'run/main_scene="res://scenes/main/Main.tscn"' in main_scene_line or
+            'run/main_scene="uid://' in main_scene_line,
+            f"Unexpected main scene reference: {main_scene_line}"
+        )
 
         for action in [
             "move_left",
@@ -220,9 +224,7 @@ class ProjectStructureTest(unittest.TestCase):
         for expected in [
             "event.is_action_pressed(\"debug_reset\")",
             "func _reset_current_scene() -> void",
-            "Engine.time_scale = 1.0",
-            "GameState.set_paused(false)",
-            "get_tree().reload_current_scene()",
+            "SceneLoader.reload_scene()",
             "get_viewport().set_input_as_handled()",
             "if level.has_method(\"setup\"):",
             "level.setup(player)",
@@ -234,6 +236,47 @@ class ProjectStructureTest(unittest.TestCase):
             debug_reset_branch.index("get_viewport().set_input_as_handled()"),
             debug_reset_branch.index("_reset_current_scene()"),
         )
+
+    def test_scene_transition_overlay_exists(self):
+        self.assertTrue((ROOT / "scenes/ui/TransitionOverlay.tscn").is_file())
+        self.assertTrue((ROOT / "scripts/ui/transition_overlay.gd").is_file())
+        self.assertTrue((ROOT / "assets/art/ui/transition/water_ripple.png").is_file())
+
+        scene = self.read("scenes/ui/TransitionOverlay.tscn")
+        self.assertIn('res://scripts/ui/transition_overlay.gd', scene)
+        self.assertIn('res://assets/art/ui/transition/water_ripple.png', scene)
+        self.assertIn('type="TextureRect"', scene)
+        self.assertIn('layer = 100', scene)
+        self.assertIn('process_mode = 3', scene)
+
+        script = self.read("scripts/ui/transition_overlay.gd")
+        for expected in [
+            "extends CanvasLayer",
+            "signal enter_complete",
+            "signal exit_complete",
+            "@export var enter_duration: float = 0.6",
+            "@export var exit_duration: float = 0.6",
+            "func play_enter()",
+            "func play_exit()",
+            "Tween.TWEEN_PAUSE_PROCESS",
+            "visible = false",
+        ]:
+            self.assertIn(expected, script)
+
+    def test_scene_loader_uses_transition_overlay(self):
+        script = self.read("scripts/autoload/SceneLoader.gd")
+        for expected in [
+            "res://scenes/ui/TransitionOverlay.tscn",
+            "_transition_overlay",
+            "func reload_scene()",
+            "get_tree().paused = true",
+            "get_tree().paused = false",
+            "Engine.time_scale = 1.0",
+            "_transition_overlay.play_enter()",
+            "_transition_overlay.play_exit()",
+            "_is_transitioning",
+        ]:
+            self.assertIn(expected, script)
 
     def test_tutorial_level_contains_prompt_triggers_and_core_parts(self):
         scene = self.read("scenes/levels/TutorialLevel.tscn")
@@ -422,6 +465,7 @@ class ProjectStructureTest(unittest.TestCase):
             "func _process(delta: float)",
             "func _physics_process(_delta: float)",
             "func _draw()",
+            "func _draw_water_body_gradient(surface_points: PackedVector2Array) -> void",
             "func get_surface_depth_at_global_position(global_position: Vector2) -> float",
             "func get_water_up_direction() -> Vector2",
             "func get_water_flow_direction() -> Vector2",
@@ -438,7 +482,9 @@ class ProjectStructureTest(unittest.TestCase):
             "edge_point + water_flow_direction * waterfall_lip_length",
             "get_overlapping_bodies()",
             "queue_redraw()",
-            "draw_colored_polygon",
+            "draw_polygon(fill_points, PackedColorArray",
+            "water_color",
+            "deep_water_color",
             "draw_polyline",
             "draw_arc",
             "apply_central_force",
@@ -512,6 +558,7 @@ class ProjectStructureTest(unittest.TestCase):
 
     def test_anchor_throw_uses_parabola_slack_chain_and_debug_logs(self):
         script = self.read("scripts/mechanics/anchor.gd")
+        anchor_scene = self.read("scenes/mechanics/Anchor.tscn")
         debug_scene = self.read("debug/AnchorThrowRegression.tscn")
         debug_script = self.read("debug/anchor_throw_regression.gd")
 
@@ -534,8 +581,24 @@ class ProjectStructureTest(unittest.TestCase):
             "func _get_rope_slack_offset",
             "JSON.stringify(get_anchor_log_data())",
             "rope_line.points = _build_slack_rope_points",
+            "@export var aim_indicator_length",
+            "@export var aim_indicator_head_length",
+            "@onready var aim_direction_line: Line2D = %AimDirectionLine",
+            "@onready var aim_direction_head: Line2D = %AimDirectionHead",
+            "func update_aim_target(target_position: Vector2) -> void",
+            "func _update_aim_indicator(target_position: Vector2) -> void",
+            "func _hide_aim_indicator() -> void",
+            "aim_direction_line.points = PackedVector2Array",
+            "aim_direction_head.points = PackedVector2Array",
         ]:
             self.assertIn(expected, script)
+
+        for expected in [
+            '[node name="AimDirectionLine" type="Line2D" parent="."]',
+            '[node name="AimDirectionHead" type="Line2D" parent="."]',
+            "visible = false",
+        ]:
+            self.assertIn(expected, anchor_scene)
 
         self.assertNotIn("global_position += launch_velocity * delta", script)
         for removed_charge in [
@@ -620,6 +683,8 @@ class ProjectStructureTest(unittest.TestCase):
             "var _anchor_swing_target_rotation",
             "@onready var anchor: Variant = %Anchor",
             "func _unhandled_input(event: InputEvent)",
+            "func _update_anchor_aim_target() -> void",
+            "anchor.update_aim_target(get_global_mouse_position())",
             "event.is_action_pressed(\"confirm\")",
             "event.is_action_released(\"confirm\")",
             "anchor.start_aim()",
