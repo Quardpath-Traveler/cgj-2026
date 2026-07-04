@@ -22,6 +22,7 @@ signal crew_lost(count: int)
 @export var anchor_swing_alignment_max_angular_velocity: float = 9.0
 @export var max_angular_velocity: float = 9.0
 @export var anchor_swing_target_turn_speed: float = 10.0
+@export var max_linear_speed: float = 0.0
 @export var crew_count: int = 3:
 	set(value):
 		crew_count = max(value, 0)
@@ -87,6 +88,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		-max_angular_velocity,
 		max_angular_velocity
 	)
+	_limit_linear_speed(state)
 
 
 func is_airborne() -> bool:
@@ -144,6 +146,14 @@ func lose_crew(amount: int = 1) -> void:
 
 	if crew_count < previous_count:
 		crew_lost.emit(crew_count)
+
+
+func _limit_linear_speed(state: PhysicsDirectBodyState2D) -> void:
+	if max_linear_speed <= 0.0:
+		return
+
+	if state.linear_velocity.length() > max_linear_speed:
+		state.linear_velocity = state.linear_velocity.normalized() * max_linear_speed
 
 
 func _apply_anchor_constraint(state: PhysicsDirectBodyState2D) -> void:
