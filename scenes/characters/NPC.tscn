@@ -1,9 +1,37 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://15x2tduve777"]
 
 [ext_resource type="Texture2D" uid="uid://hksw5ao11y1i" path="res://assets/art/Character Art Assets/Protagonist Assets/npc.png" id="1_npc"]
+[ext_resource type="Script" uid="uid://bl0iyv7rvelen" path="res://scripts/characters/floating_npc.gd" id="2_floating"]
+[ext_resource type="Script" path="res://scripts/characters/npc_rescue.gd" id="3_rescue"]
 
-[node name="NPC" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_waterdetector"]
+size = Vector2(32, 16)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -107.5)
+[sub_resource type="CircleShape2D" id="CircleShape2D_rescue"]
+radius = 32.0
+
+[node name="NPC" type="Node2D" unique_id=759507777 node_paths=PackedStringArray("detection_area", "sprite")]
+script = ExtResource("2_floating")
+detection_area = NodePath("WaterDetector")
+sprite = NodePath("Sprite2D")
+drift_speed_multiplier = 0.6
+vertical_offset = 0.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=58462542]
+position = Vector2(0, -33.000004)
+scale = Vector2(0.30371904, 0.30371907)
 texture = ExtResource("1_npc")
+
+[node name="WaterDetector" type="Area2D" parent="." unique_id=123456789]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterDetector" unique_id=987654321]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_waterdetector")
+
+[node name="RescueArea" type="Area2D" parent="." unique_id=482913504]
+script = ExtResource("3_rescue")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RescueArea" unique_id=937405821]
+shape = SubResource("CircleShape2D_rescue")

@@ -1,8 +1,11 @@
 class_name Boat
 extends RigidBody2D
 
+const CREW_MEMBER_SCENE := preload("res://scenes/characters/BoatCrewNPC.tscn")
+
 signal crew_count_changed(count: int)
 signal crew_lost(count: int)
+signal crew_gained(count: int)
 
 @export var airborne_rotation_torque: float = 90000.0
 @export var counter_rotation_boost: float = 2.0
@@ -22,10 +25,22 @@ signal crew_lost(count: int)
 @export var anchor_swing_alignment_max_angular_velocity: float = 9.0
 @export var max_angular_velocity: float = 9.0
 @export var anchor_swing_target_turn_speed: float = 10.0
+@export var max_linear_speed: float = 0.0
+@export var bad_landing_righting_torque: float = 80000.0
+@export var bad_landing_righting_duration: float = 0.5
+@export var bad_landing_righting_damping: float = 3200.0
+@export var bad_landing_min_trigger_interval: float = 0.3
+@export var respawn_recovery_grace: float = 0.5
+@export var max_crew_count: int = 5
+@export var crew_visual_origin: Vector2 = Vector2(0.0, 13.0)
+@export var crew_visual_spacing: float = 12.5
+@export var crew_visual_scale: Vector2 = Vector2(0.42, 0.42)
 @export var crew_count: int = 3:
 	set(value):
-		crew_count = max(value, 0)
+		crew_count = clampi(value, 0, max_crew_count)
 		crew_count_changed.emit(crew_count)
+		if is_inside_tree():
+			_sync_crew_visuals()
 
 var _contact_count: int = 0
 var _water_contact_count: int = 0
@@ -39,11 +54,23 @@ var _manual_bullet_time_start_scale: float = 1.0
 var _manual_bullet_time_transition_elapsed: float = 0.0
 var _is_counter_rotation_boost_active: bool = false
 
+enum RespawnState { NONE, RECALL, LAUNCH, RECOVER }
+
+var _respawn_state: RespawnState = RespawnState.NONE
+var _respawn_target: Vector2 = Vector2.ZERO
+var _respawn_recovery_timer: float = 0.0
+var _righting_timer: float = 0.0
+var _righting_target_rotation: float = 0.0
+var _last_bad_landing_water: Node2D = null
+var _last_bad_landing_time: float = -1000.0
+
 @onready var anchor: Variant = %Anchor
+@onready var crew_visuals: Node2D = %CrewVisuals
 
 
 func _ready() -> void:
 	add_to_group("boats")
+	_sync_crew_visuals()
 	EventBus.player_spawned.emit(self)
 	crew_count_changed.emit(crew_count)
 	anchor.aim_started.connect(_on_anchor_aim_started)
@@ -54,6 +81,12 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_update_manual_bullet_time(delta)
+	_update_respawn_recovery_timer(delta)
+	_update_respawn_state(delta)
+
+	if _respawn_state != RespawnState.NONE:
+		_update_posture_log(delta)
+		return
 
 	var rotation_input := Input.get_axis("move_left", "move_right")
 	if is_airborne():
@@ -70,6 +103,9 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _respawn_state != RespawnState.NONE:
+		return
+
 	if event.is_action_pressed("confirm"):
 		if anchor.is_active():
 			anchor.recall()
@@ -81,12 +117,28 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	_contact_count = state.get_contact_count()
+
+	if _respawn_state == RespawnState.LAUNCH:
+		_execute_respawn_launch(state)
+		_respawn_state = RespawnState.RECOVER
+
+	if _respawn_state != RespawnState.NONE:
+		state.angular_velocity = clampf(
+			state.angular_velocity,
+			-max_angular_velocity,
+			max_angular_velocity
+		)
+		_limit_linear_speed(state)
+		return
+
 	_apply_anchor_constraint(state)
+	_apply_bad_landing_righting(state)
 	state.angular_velocity = clampf(
 		state.angular_velocity,
 		-max_angular_velocity,
 		max_angular_velocity
 	)
+	_limit_linear_speed(state)
 
 
 func is_airborne() -> bool:
@@ -140,10 +192,89 @@ func emit_posture_log() -> void:
 
 func lose_crew(amount: int = 1) -> void:
 	var previous_count := crew_count
-	crew_count = max(crew_count - amount, 0)
+	crew_count -= amount
 
 	if crew_count < previous_count:
 		crew_lost.emit(crew_count)
+
+
+func gain_crew(amount: int = 1) -> void:
+	var previous_count := crew_count
+	crew_count += amount
+
+	if crew_count > previous_count:
+		crew_gained.emit(crew_count)
+
+
+func _sync_crew_visuals() -> void:
+	if crew_visuals == null:
+		return
+
+	for child in crew_visuals.get_children():
+		crew_visuals.remove_child(child)
+		child.queue_free()
+
+	if crew_count <= 0:
+		return
+
+	var row_width := crew_visual_spacing * float(crew_count - 1)
+	for index in range(crew_count):
+		var crew_member := CREW_MEMBER_SCENE.instantiate() as Node2D
+		crew_member.name = "CrewMember%d" % (index + 1)
+		crew_member.position = crew_visual_origin + Vector2(
+			float(index) * crew_visual_spacing - row_width * 0.5,
+			0.0
+		)
+		crew_member.scale = crew_visual_scale
+		crew_visuals.add_child(crew_member)
+
+
+func is_respawning() -> bool:
+	return _respawn_state != RespawnState.NONE
+
+
+func respawn_at(target_position: Vector2) -> void:
+	if _respawn_state != RespawnState.NONE:
+		return
+	if _respawn_recovery_timer > 0.0:
+		return
+	_respawn_state = RespawnState.RECALL
+	_respawn_target = target_position
+
+
+func on_bad_landing(angle_degrees: float, target_rotation: float, water_surface: Node2D) -> void:
+	if water_surface == _last_bad_landing_water:
+		if Time.get_ticks_msec() / 1000.0 - _last_bad_landing_time < bad_landing_min_trigger_interval:
+			return
+
+	lose_crew(1)
+	_righting_timer = bad_landing_righting_duration
+	_righting_target_rotation = target_rotation
+	_last_bad_landing_water = water_surface
+	_last_bad_landing_time = Time.get_ticks_msec() / 1000.0
+
+
+func _limit_linear_speed(state: PhysicsDirectBodyState2D) -> void:
+	if max_linear_speed <= 0.0:
+		return
+
+	if state.linear_velocity.length() > max_linear_speed:
+		state.linear_velocity = state.linear_velocity.normalized() * max_linear_speed
+
+
+func _apply_bad_landing_righting(state: PhysicsDirectBodyState2D) -> void:
+	if _righting_timer <= 0.0:
+		return
+
+	_righting_timer -= state.step
+	var decay := clampf(_righting_timer / bad_landing_righting_duration, 0.0, 1.0)
+
+	var rotation_error := wrapf(state.transform.get_rotation() - _righting_target_rotation, -PI, PI)
+	var righting_torque := (
+		-rotation_error * bad_landing_righting_torque * decay
+		- state.angular_velocity * bad_landing_righting_damping * decay
+	)
+	state.apply_torque(righting_torque)
 
 
 func _apply_anchor_constraint(state: PhysicsDirectBodyState2D) -> void:
@@ -348,6 +479,36 @@ func _update_posture_log(delta: float) -> void:
 
 	_posture_log_elapsed = 0.0
 	emit_posture_log()
+
+
+func _update_respawn_recovery_timer(delta: float) -> void:
+	if _respawn_recovery_timer > 0.0:
+		_respawn_recovery_timer = maxf(_respawn_recovery_timer - delta, 0.0)
+
+
+func _update_respawn_state(_delta: float) -> void:
+	match _respawn_state:
+		RespawnState.RECALL:
+			_recall_anchor_for_respawn()
+			_respawn_state = RespawnState.LAUNCH
+		RespawnState.RECOVER:
+			if is_in_water() or _contact_count > 0:
+				_respawn_recovery_timer = respawn_recovery_grace
+				_respawn_state = RespawnState.NONE
+
+
+func _recall_anchor_for_respawn() -> void:
+	if anchor.is_active() or anchor.is_hooked():
+		anchor.recall()
+	_reset_anchor_swing_state()
+
+
+func _execute_respawn_launch(state: PhysicsDirectBodyState2D) -> void:
+	state.transform.origin = _respawn_target
+	state.linear_velocity = Vector2.ZERO
+	state.angular_velocity = 0.0
+	if crew_count > 0:
+		lose_crew(1)
 
 
 func _vector_to_log_data(value: Vector2) -> Dictionary:

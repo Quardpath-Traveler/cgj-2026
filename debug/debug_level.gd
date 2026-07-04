@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var level: TutorialLevel = $World/TutorialLevel
+@onready var level: Node2D = $World/Level
 @onready var player: Boat = $Player
 @onready var pause_menu := $PauseMenu
 
@@ -9,8 +9,10 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	GameState.reset()
 	GameState.pause_changed.connect(_on_pause_changed)
-	level.setup(player)
-	player.global_position = level.get_start_position()
+	if level.has_method("setup"):
+		level.setup(player)
+	if level.has_method("get_start_position"):
+		player.global_position = level.get_start_position()
 	_on_pause_changed(GameState.is_paused)
 
 
@@ -28,7 +30,7 @@ func _reset_current_scene() -> void:
 	GameState.set_paused(false)
 	var error := get_tree().reload_current_scene()
 	if error != OK:
-		push_error("Failed to reload tutorial playtest scene: %s" % error)
+		push_error("Failed to reload debug level scene: %s" % error)
 
 
 func _on_pause_changed(is_paused: bool) -> void:
