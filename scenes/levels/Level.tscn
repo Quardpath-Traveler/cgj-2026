@@ -400,9 +400,6 @@ position = Vector2(3431, 1717)
 [node name="WaveChaser" parent="." unique_id=10999686 instance=ExtResource("4_litjp")]
 position = Vector2(-120, 270)
 
-[node name="Obstacle" parent="." unique_id=66557457 instance=ExtResource("5_mn2x6")]
-position = Vector2(1597, 450)
-
 [node name="CanCollectible" parent="." unique_id=1479361518 instance=ExtResource("6_wlcp4")]
 position = Vector2(1068, 400)
 
@@ -456,13 +453,31 @@ position = Vector2(2958, 823)
 position = Vector2(1728, 675)
 
 [node name="DeathZone" parent="." unique_id=724025732 node_paths=PackedStringArray("respawn_marker") instance=ExtResource("8_iv3rn")]
-position = Vector2(1246, 778)
+position = Vector2(1180.9999, 1012)
 rotation = 0.2655507
 respawn_marker = NodePath("StartMarker2")
 
 [node name="StartMarker2" type="Marker2D" parent="DeathZone" unique_id=481139926]
 unique_name_in_owner = true
-position = Vector2(218.77106, -296.8185)
+position = Vector2(290.78534, -557.8683)
+rotation = -0.2655507
+
+[node name="DeathZone2" parent="." unique_id=1012081456 node_paths=PackedStringArray("respawn_marker") instance=ExtResource("8_iv3rn")]
+position = Vector2(3596.0002, 787)
+rotation = -1.5843902
+respawn_marker = NodePath("StartMarker2")
+
+[node name="StartMarker2" type="Marker2D" parent="DeathZone2" unique_id=1349922887]
+position = Vector2(-56.296997, -272.79047)
+rotation = -0.2655507
+
+[node name="DeathZone3" parent="." unique_id=1804468240 node_paths=PackedStringArray("respawn_marker") instance=ExtResource("8_iv3rn")]
+position = Vector2(3086, 2111)
+rotation = 0.016275167
+respawn_marker = NodePath("StartMarker2")
+
+[node name="StartMarker2" type="Marker2D" parent="DeathZone3" unique_id=1065408859]
+position = Vector2(432.73425, -327.08585)
 rotation = -0.2655507
 
 [node name="HookPointB2" parent="." unique_id=695728318 instance=ExtResource("3_iv3rn")]
@@ -486,7 +501,7 @@ enable_waterfall = false
 position = Vector2(2310, 1621.0001)
 rotation = 0.37436134
 water_width = 1000.0
-water_depth = 72.0
+water_depth = 599.49
 surface_y = -36.0
 wave_amplitude = 9.0
 secondary_wave_amplitude = 4.0
@@ -518,7 +533,7 @@ texture = ExtResource("12_mountain4")
 [node name="Mountain1" type="Sprite2D" parent="." unique_id=1941414836]
 show_behind_parent = true
 position = Vector2(816, 350)
-rotation = 0.2550183
+rotation = 0.25501826
 scale = Vector2(0.6840035, 0.6610912)
 texture = ExtResource("11_mountain1")
 
@@ -546,15 +561,15 @@ texture = ExtResource("10_mountain3")
 [node name="Mountain2" type="Sprite2D" parent="." unique_id=1828878149]
 show_behind_parent = true
 position = Vector2(1402, 502.00003)
-rotation = 0.23422736
-scale = Vector2(0.59519726, 1)
+rotation = 0.23422734
+scale = Vector2(0.5951973, 1)
 texture = ExtResource("13_mountain2")
 flip_h = true
 
 [node name="Mountain3" type="Sprite2D" parent="." unique_id=547420622]
 show_behind_parent = true
 position = Vector2(1373, 705.00006)
-rotation = 0.23422736
+rotation = 0.23422737
 scale = Vector2(0.35392514, 0.567852)
 texture = ExtResource("13_mountain2")
 flip_h = true
@@ -610,7 +625,7 @@ flip_h = true
 [node name="Mountain9" type="Sprite2D" parent="." unique_id=787645052]
 show_behind_parent = true
 position = Vector2(2332.9998, 1155)
-rotation = 0.23422737
+rotation = 0.23422739
 scale = Vector2(0.35392514, 0.567852)
 texture = ExtResource("13_mountain2")
 flip_h = true
@@ -619,7 +634,7 @@ flip_h = true
 show_behind_parent = true
 position = Vector2(1938.3722, 1727.9558)
 rotation = 0.03369804
-scale = Vector2(0.8651731, 1.0395024)
+scale = Vector2(0.86517304, 1.0395024)
 texture = ExtResource("15_fill_gaps2")
 
 [node name="FillGaps10" type="Sprite2D" parent="." unique_id=1259317293]
@@ -632,15 +647,15 @@ texture = ExtResource("20_xa47j")
 [node name="FillGaps4" type="Sprite2D" parent="." unique_id=2132964451]
 show_behind_parent = true
 position = Vector2(1960.4581, 1396.3975)
-rotation = 0.19199806
-scale = Vector2(0.90958905, 0.9695943)
+rotation = 0.19199808
+scale = Vector2(0.909589, 0.9695943)
 texture = ExtResource("14_fill_gaps")
 
 [node name="Mountain11" type="Sprite2D" parent="." unique_id=155057915]
 show_behind_parent = true
 position = Vector2(1777.5826, 2147.2524)
 rotation = 0.033307746
-scale = Vector2(0.5797691, 1.0815078)
+scale = Vector2(0.5797691, 1.0815077)
 skew = 0.0676018
 texture = ExtResource("13_mountain2")
 flip_h = true

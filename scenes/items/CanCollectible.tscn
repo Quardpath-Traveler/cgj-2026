@@ -1,9 +1,105 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/can_collectible.gd" id="1_can"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0001.png" id="2_coin_0001"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0002.png" id="3_coin_0002"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0003.png" id="4_coin_0003"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0004.png" id="5_coin_0004"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0005.png" id="6_coin_0005"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0006.png" id="7_coin_0006"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0007.png" id="8_coin_0007"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0008.png" id="9_coin_0008"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0009.png" id="10_coin_0009"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0010.png" id="11_coin_0010"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0011.png" id="12_coin_0011"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0012.png" id="13_coin_0012"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0013.png" id="14_coin_0013"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0014.png" id="15_coin_0014"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0015.png" id="16_coin_0015"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0016.png" id="17_coin_0016"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0017.png" id="18_coin_0017"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0018.png" id="19_coin_0018"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0019.png" id="20_coin_0019"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0020.png" id="21_coin_0020"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0021.png" id="22_coin_0021"]
+[ext_resource type="Texture2D" path="res://assets/art/Character Prop Assets/coin/0022.png" id="23_coin_0022"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_can"]
 radius = 12.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_coin"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_coin_0001")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_coin_0002")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_coin_0003")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_coin_0004")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_coin_0005")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_coin_0006")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_coin_0007")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_coin_0008")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_coin_0009")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_coin_0010")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_coin_0011")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_coin_0012")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_coin_0013")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_coin_0014")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_coin_0015")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_coin_0016")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_coin_0017")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_coin_0018")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_coin_0019")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_coin_0020")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_coin_0021")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_coin_0022")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
 
 [node name="CanCollectible" type="Area2D"]
 script = ExtResource("1_can")
@@ -11,6 +107,8 @@ script = ExtResource("1_can")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_can")
 
-[node name="Visual" type="Polygon2D" parent="."]
-color = Color(0.94, 0.74, 0.22, 1)
-polygon = PackedVector2Array(-9, -13, 9, -13, 12, 11, -12, 11)
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.06, 0.06)
+sprite_frames = SubResource("SpriteFrames_coin")
+animation = &"default"
+autoplay = "default"
