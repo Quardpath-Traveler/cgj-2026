@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/game/game.gd" id="1_game"]
-[ext_resource type="PackedScene" uid="uid://bqx7auto8finish" path="res://scenes/levels/LevelAutoFinish.tscn" id="2_level"]
+[ext_resource type="PackedScene" uid="uid://cyduhc81yum6i" path="res://scenes/levels/LevelAutoFinish.tscn" id="2_level"]
 [ext_resource type="PackedScene" uid="uid://cgdpl2y4glvwl" path="res://scenes/player/Boat.tscn" id="3_boat"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="4_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="5_pause"]
