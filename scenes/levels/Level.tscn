@@ -8,12 +8,361 @@
 [ext_resource type="PackedScene" path="res://scenes/items/CanCollectible.tscn" id="6_wlcp4"]
 [ext_resource type="PackedScene" uid="uid://15x2tduve777" path="res://scenes/characters/NPC.tscn" id="7_a3ws7"]
 [ext_resource type="PackedScene" path="res://scenes/mechanics/DeathZone.tscn" id="8_iv3rn"]
+[ext_resource type="Texture2D" uid="uid://bc7w5dhl4757f" path="res://assets/art/Scene Assets/sky.png" id="9_sky"]
+[ext_resource type="Texture2D" uid="uid://cx6rdyh1qy5xs" path="res://assets/art/Scene Assets/mountain/mountain3.png" id="10_mountain3"]
+[ext_resource type="Texture2D" uid="uid://c8yq6b7u70to" path="res://assets/art/Scene Assets/mountain/mountain1.png" id="11_mountain1"]
+[ext_resource type="Texture2D" uid="uid://bjb06b5emi0dx" path="res://assets/art/Scene Assets/mountain/mountain4.png" id="12_mountain4"]
+[ext_resource type="Texture2D" uid="uid://btpg8gr0capux" path="res://assets/art/Scene Assets/mountain/mountain2.png" id="13_mountain2"]
+[ext_resource type="Texture2D" uid="uid://bi5xp8mkoorfu" path="res://assets/art/Scene Assets/mountain/fill gaps.png" id="14_fill_gaps"]
+[ext_resource type="Texture2D" uid="uid://r2heekhlan7s" path="res://assets/art/Scene Assets/mountain/fill gaps2.png" id="15_fill_gaps2"]
+[ext_resource type="Texture2D" uid="uid://8m6bvmji25dc" path="res://assets/art/Scene Assets/cloud/cloud4.png" id="16_cloud4"]
+[ext_resource type="Texture2D" uid="uid://dis2t2a8omjtm" path="res://assets/art/Scene Assets/cloud/cloud2.png" id="17_cloud2"]
+[ext_resource type="Texture2D" uid="uid://bkoqshsjfemj0" path="res://assets/art/Scene Assets/cloud/cloud1.png" id="18_cloud1"]
+[ext_resource type="Texture2D" uid="uid://hmlsgcmc8sjd" path="res://assets/art/Scene Assets/cloud/cloud5.png" id="19_cloud5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_finish"]
 size = Vector2(80, 170)
 
 [node name="LevelPrototypeSlope" type="Node2D" unique_id=323909850]
 script = ExtResource("1_5n3p8")
+
+[node name="Background" type="Node2D" parent="." unique_id=675428932]
+z_index = -100
+
+[node name="Sky" type="Sprite2D" parent="Background" unique_id=169460138]
+position = Vector2(1600, 777.5001)
+scale = Vector2(1.85, 2.4854167)
+texture = ExtResource("9_sky")
+
+[node name="Sky2" type="Sprite2D" parent="Background" unique_id=1309992040]
+position = Vector2(6208.9995, 776)
+scale = Vector2(1.85, 2.489236)
+texture = ExtResource("9_sky")
+
+[node name="Clouds" type="Node2D" parent="Background" unique_id=1998993970]
+z_index = 10
+
+[node name="CloudLeft" type="Sprite2D" parent="Background/Clouds" unique_id=836572002]
+position = Vector2(160, -120)
+rotation = 0.42177102
+scale = Vector2(0.5212769, 0.5324004)
+texture = ExtResource("16_cloud4")
+
+[node name="CloudLeftLarge" type="Sprite2D" parent="Background/Clouds/CloudLeft" unique_id=787320142]
+position = Vector2(655.4195, -295.6978)
+rotation = -0.24932583
+scale = Vector2(0.9983449, 1.0198972)
+skew = -0.010286808
+texture = ExtResource("18_cloud1")
+
+[node name="CloudLeftHigh" type="Sprite2D" parent="Background/Clouds/CloudLeft" unique_id=260676094]
+position = Vector2(62.794106, -464.91528)
+rotation = -0.23492171
+scale = Vector2(1.2630699, 1.1455039)
+skew = -0.009741306
+texture = ExtResource("17_cloud2")
+
+[node name="CloudMid" type="Sprite2D" parent="Background/Clouds" unique_id=1514485725]
+position = Vector2(1450, -350)
+rotation = -0.14889663
+scale = Vector2(1.3840529, 1.1767558)
+skew = -0.006321907
+texture = ExtResource("19_cloud5")
+
+[node name="CloudMidWide" type="Sprite2D" parent="Background/Clouds/CloudMid" unique_id=812059943]
+position = Vector2(360, -280)
+rotation = -0.17658599
+scale = Vector2(1.6631638, 1.5818046)
+skew = -0.0074493885
+texture = ExtResource("16_cloud4")
+
+[node name="CloudRight" type="Sprite2D" parent="Background/Clouds" unique_id=1641848126]
+position = Vector2(2740, -390)
+rotation = -0.4139401
+scale = Vector2(1.9117076, 1.8850619)
+skew = -0.015772581
+texture = ExtResource("18_cloud1")
+
+[node name="CloudRightLow" type="Sprite2D" parent="Background/Clouds/CloudRight" unique_id=309779941]
+position = Vector2(480, 215)
+rotation = -0.13360508
+scale = Vector2(1.4538541, 1.3581716)
+skew = -0.005690098
+texture = ExtResource("16_cloud4")
+
+[node name="Mountains" type="Node2D" parent="Background" unique_id=2065895058]
+visible = false
+z_index = 20
+
+[node name="MountainStart" type="Sprite2D" parent="Background/Mountains" unique_id=430875094]
+position = Vector2(-40, 140)
+rotation = 0.22535998
+scale = Vector2(0.64, 0.5)
+texture = ExtResource("11_mountain1")
+
+[node name="MountainStartBack" type="Sprite2D" parent="Background/Mountains" unique_id=361341809]
+position = Vector2(531, 272)
+rotation = 0.22057043
+scale = Vector2(0.7, 0.74)
+skew = 0.0102574825
+texture = ExtResource("10_mountain3")
+
+[node name="MountainUpperMid" type="Sprite2D" parent="Background/Mountains/MountainStartBack" unique_id=779482564]
+position = Vector2(1320, 72)
+rotation = 0.02171105
+scale = Vector2(1.3337883, 0.73013884)
+skew = 0.004028797
+texture = ExtResource("12_mountain4")
+
+[node name="MountainMid" type="Sprite2D" parent="Background/Mountains" unique_id=167600433]
+position = Vector2(1191, 357)
+rotation = 0.24487086
+scale = Vector2(0.75, 1.25)
+texture = ExtResource("13_mountain2")
+
+[node name="FillGapsMid" type="Sprite2D" parent="Background/Mountains/MountainMid" unique_id=594215058]
+position = Vector2(95, 288)
+rotation = 0.011394596
+scale = Vector2(0.95, 0.54)
+skew = 0.040261865
+texture = ExtResource("14_fill_gaps")
+
+[node name="MountainMid2" type="Sprite2D" parent="Background/Mountains" unique_id=1030846758]
+position = Vector2(1191, 357)
+rotation = 0.24487086
+scale = Vector2(0.75, 1.25)
+texture = ExtResource("13_mountain2")
+
+[node name="FillGapsMid" type="Sprite2D" parent="Background/Mountains/MountainMid2" unique_id=149240206]
+position = Vector2(95, 288)
+rotation = 0.011394596
+scale = Vector2(0.95, 0.54)
+skew = 0.040261865
+texture = ExtResource("14_fill_gaps")
+
+[node name="FillGapsLate2" type="Sprite2D" parent="Background/Mountains" unique_id=1404063168]
+position = Vector2(2771.0002, 1062)
+rotation = 0.25582767
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate6" type="Sprite2D" parent="Background/Mountains" unique_id=356092803]
+position = Vector2(2713, 1233)
+rotation = 0.25582767
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate7" type="Sprite2D" parent="Background/Mountains" unique_id=640871873]
+position = Vector2(2134, 1090)
+rotation = 0.25582767
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate8" type="Sprite2D" parent="Background/Mountains" unique_id=1574255228]
+position = Vector2(1657.0002, 983)
+rotation = 0.25582767
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate9" type="Sprite2D" parent="Background/Mountains" unique_id=1097591362]
+position = Vector2(2462, 1357)
+rotation = 0.25582767
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate10" type="Sprite2D" parent="Background/Mountains" unique_id=1542886481]
+position = Vector2(1886, 1211)
+rotation = 0.25582767
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate12" type="Sprite2D" parent="Background/Mountains" unique_id=2006970281]
+position = Vector2(2050, 1661.9999)
+rotation = 0.3590541
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate13" type="Sprite2D" parent="Background/Mountains" unique_id=1351793111]
+position = Vector2(2448.9998, 1816)
+rotation = 0.39324337
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate11" type="Sprite2D" parent="Background/Mountains" unique_id=1360763009]
+position = Vector2(1318, 1065)
+rotation = 0.25582767
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate3" type="Sprite2D" parent="Background/Mountains" unique_id=29445485]
+position = Vector2(2876, 1378.0002)
+rotation = -0.5298132
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate4" type="Sprite2D" parent="Background/Mountains" unique_id=500497510]
+position = Vector2(3273, 1164.0002)
+rotation = -0.5298132
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate14" type="Sprite2D" parent="Background/Mountains" unique_id=464102696]
+position = Vector2(3302.9998, 1695.0001)
+rotation = 0.0451389
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate15" type="Sprite2D" parent="Background/Mountains" unique_id=523437440]
+z_index = -9
+position = Vector2(3930.0002, 1603.0001)
+rotation = 0.0451389
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate16" type="Sprite2D" parent="Background/Mountains" unique_id=761345160]
+z_index = -9
+position = Vector2(3807.9998, 1776.0001)
+rotation = 0.0451389
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate17" type="Sprite2D" parent="Background/Mountains" unique_id=2128739987]
+z_index = -9
+position = Vector2(2991, 1942.0001)
+rotation = 0.0451389
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate18" type="Sprite2D" parent="Background/Mountains" unique_id=713314060]
+z_index = -9
+position = Vector2(3508, 1967.0002)
+rotation = 0.0451389
+scale = Vector2(0.543991, 0.4391825)
+skew = 0.05616343
+texture = ExtResource("15_fill_gaps2")
+
+[node name="FillGapsLate" type="Sprite2D" parent="Background/Mountains" unique_id=1453571807]
+position = Vector2(2061, 642)
+rotation = 0.256241
+scale = Vector2(0.74, 1.05072)
+texture = ExtResource("15_fill_gaps2")
+
+[node name="MountainLate" type="Sprite2D" parent="Background/Mountains/FillGapsLate" unique_id=1721081071]
+position = Vector2(1079.8104, -215.39423)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainLate2" type="Sprite2D" parent="Background/Mountains/FillGapsLate" unique_id=1120240469]
+position = Vector2(1079.8104, -215.39423)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="FillGapsLate5" type="Sprite2D" parent="Background/Mountains" unique_id=1804310797]
+show_behind_parent = true
+position = Vector2(3394.9995, 1753.9999)
+rotation = 0.069514126
+scale = Vector2(0.74, 0.66)
+texture = ExtResource("15_fill_gaps2")
+
+[node name="MountainLate" type="Sprite2D" parent="Background/Mountains/FillGapsLate5" unique_id=2105432295]
+position = Vector2(1041.8074, -216.5043)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainLate2" type="Sprite2D" parent="Background/Mountains/FillGapsLate5" unique_id=450190446]
+position = Vector2(-599.9078, -127.83185)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainLate3" type="Sprite2D" parent="Background/Mountains/FillGapsLate5" unique_id=945177641]
+position = Vector2(-71.63003, -542.7016)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainLate4" type="Sprite2D" parent="Background/Mountains/FillGapsLate5" unique_id=1710237837]
+z_index = -6
+position = Vector2(219.07681, -987.6282)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainLate5" type="Sprite2D" parent="Background/Mountains/FillGapsLate5" unique_id=515045406]
+z_index = -6
+position = Vector2(-2080.6138, -478.51654)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainLate7" type="Sprite2D" parent="Background/Mountains/FillGapsLate5" unique_id=1805146961]
+z_index = -6
+position = Vector2(-1480.4497, -390.19427)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainLate6" type="Sprite2D" parent="Background/Mountains/FillGapsLate5" unique_id=1230896151]
+z_index = -6
+position = Vector2(-509.99667, -359.63614)
+rotation = -0.027231358
+scale = Vector2(1.1, 1.95)
+skew = 0.001437068
+texture = ExtResource("13_mountain2")
+
+[node name="MountainEnd" type="Sprite2D" parent="Background/Mountains" unique_id=2107622362]
+show_behind_parent = true
+position = Vector2(3149, 839.99994)
+rotation = 0.2106581
+scale = Vector2(0.86, 0.94)
+texture = ExtResource("10_mountain3")
+
+[node name="MountainEndPeak" type="Sprite2D" parent="Background/Mountains/MountainEnd" unique_id=317516432]
+z_index = -15
+position = Vector2(560, -255)
+rotation = 0.08
+scale = Vector2(0.76, 1.15)
+texture = ExtResource("12_mountain4")
+
+[node name="MountainEnd2" type="Sprite2D" parent="Background/Mountains" unique_id=631339797]
+show_behind_parent = true
+position = Vector2(3914, 1353.0001)
+rotation = 0.03273271
+scale = Vector2(0.86, 0.94)
+texture = ExtResource("10_mountain3")
+
+[node name="MountainEndPeak" type="Sprite2D" parent="Background/Mountains/MountainEnd2" unique_id=2085779102]
+position = Vector2(560, -255)
+rotation = 0.08
+scale = Vector2(0.76, 1.15)
+texture = ExtResource("12_mountain4")
+
 
 [node name="StartMarker" type="Marker2D" parent="." unique_id=1082883030]
 unique_name_in_owner = true
