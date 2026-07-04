@@ -60,7 +60,7 @@ var _respawn_recovery_timer: float = 0.0
 ```
 
 New exports:
-- `@export var respawn_launch_force: float = 900.0` — upward impulse applied at the respawn point.
+- `@export var respawn_launch_velocity: float = 900.0` — upward velocity applied at the respawn point (px/s).
 - `@export var respawn_recovery_grace: float = 0.5` — seconds of invulnerability after landing.
 
 New public method:
@@ -82,7 +82,7 @@ State machine behavior:
 2. **LAUNCH** (one physics frame)
    - Teleport the boat to `_respawn_target` via `global_position`.
    - Zero `linear_velocity` and `angular_velocity`.
-   - Apply central impulse `Vector2.UP * respawn_launch_force`.
+   - Set `linear_velocity = Vector2.UP * respawn_launch_velocity`.
    - If `crew_count > 0`, call `lose_crew(1)`.
    - Transition to `RECOVER`.
 
