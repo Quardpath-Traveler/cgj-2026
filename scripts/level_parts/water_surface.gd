@@ -78,9 +78,23 @@ signal boat_bad_landing(boat: Node2D, landing_angle_degrees: float, target_rotat
 
 var _time: float = 0.0
 var _boats_in_water: Array[Node2D] = []
+var _collision_shape_is_unique := false
 
 func _get_collision_shape() -> CollisionShape2D:
 	return get_node_or_null("CollisionShape2D") as CollisionShape2D
+
+
+func _get_unique_rectangle_shape() -> RectangleShape2D:
+	var collision_shape := _get_collision_shape()
+	if collision_shape == null:
+		return null
+	if not collision_shape.shape is RectangleShape2D:
+		return null
+	if not _collision_shape_is_unique:
+		collision_shape.shape = collision_shape.shape.duplicate()
+		collision_shape.shape.resource_local_to_scene = true
+		_collision_shape_is_unique = true
+	return collision_shape.shape as RectangleShape2D
 
 
 func _ready() -> void:
@@ -112,20 +126,25 @@ func _physics_process(_delta: float) -> void:
 
 func _draw() -> void:
 	var surface_points := _build_surface_points()
+
+	_draw_water_body_gradient(surface_points)
+	draw_polyline(surface_points, foam_color, 3.0)
+	_draw_flow_lines()
+	_draw_waterfall()
+
+
+func _draw_water_body_gradient(surface_points: PackedVector2Array) -> void:
 	var fill_points := surface_points.duplicate()
 	fill_points.append(Vector2(water_width * 0.5, surface_y + water_depth))
 	fill_points.append(Vector2(-water_width * 0.5, surface_y + water_depth))
 
-	draw_colored_polygon(fill_points, water_color)
-	draw_colored_polygon([
-		Vector2(-water_width * 0.5, surface_y + water_depth * 0.45),
-		Vector2(water_width * 0.5, surface_y + water_depth * 0.45),
-		Vector2(water_width * 0.5, surface_y + water_depth),
-		Vector2(-water_width * 0.5, surface_y + water_depth),
-	], deep_water_color)
-	draw_polyline(surface_points, foam_color, 3.0)
-	_draw_flow_lines()
-	_draw_waterfall()
+	var fill_colors := PackedColorArray()
+	for _point in surface_points:
+		fill_colors.append(water_color)
+	fill_colors.append(deep_water_color)
+	fill_colors.append(deep_water_color)
+
+	draw_polygon(fill_points, PackedColorArray(fill_colors))
 
 
 func _on_body_entered(body: Node2D) -> void:
@@ -299,13 +318,12 @@ func _is_in_waterfall_edge(local_position: Vector2) -> bool:
 
 func _sync_collision_shape() -> void:
 	var collision_shape := _get_collision_shape()
-	if collision_shape == null:
+	var rectangle := _get_unique_rectangle_shape()
+	if collision_shape == null or rectangle == null:
 		return
-	if collision_shape.shape is RectangleShape2D:
-		var rectangle := collision_shape.shape as RectangleShape2D
-		var extra_height := waterfall_height if enable_waterfall else 0.0
-		rectangle.size = Vector2(water_width, water_depth + wave_amplitude * 2.0 + extra_height)
-		collision_shape.position = Vector2(0.0, surface_y + (water_depth + extra_height) * 0.5)
+	var extra_height := waterfall_height if enable_waterfall else 0.0
+	rectangle.size = Vector2(water_width, water_depth + wave_amplitude * 2.0 + extra_height)
+	collision_shape.position = Vector2(0.0, surface_y + (water_depth + extra_height) * 0.5)
 
 
 func _build_surface_points() -> PackedVector2Array:

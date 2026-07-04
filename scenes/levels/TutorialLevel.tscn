@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/level_parts/Obstacle.tscn" id="6_obstacle"]
 [ext_resource type="PackedScene" path="res://scenes/items/CanCollectible.tscn" id="7_can"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TutorialPrompt.tscn" id="8_prompt"]
-[ext_resource type="PackedScene" uid="uid://tRLM6HrD4JUa8" path="res://scenes/mechanics/DeathZone.tscn" id="9_death"]
+[ext_resource type="PackedScene" path="res://scenes/mechanics/DeathZone.tscn" id="9_death"]
 [ext_resource type="Texture2D" uid="uid://bc7w5dhl4757f" path="res://assets/art/Scene Assets/sky.png" id="10_sky"]
 [ext_resource type="Texture2D" uid="uid://cx6rdyh1qy5xs" path="res://assets/art/Scene Assets/mountain/mountain3.png" id="11_mountain3"]
 [ext_resource type="Texture2D" uid="uid://c8yq6b7u70to" path="res://assets/art/Scene Assets/mountain/mountain1.png" id="12_mountain1"]
@@ -29,9 +29,6 @@ size = Vector2(180, 180)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prompt_wide"]
 size = Vector2(260, 200)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_death_tutorial"]
-size = Vector2(3000, 200)
 
 [node name="TutorialLevel" type="Node2D" unique_id=226315810]
 script = ExtResource("1_level")
@@ -152,23 +149,20 @@ scale = Vector2(1.0500249, 1.897762)
 skew = 0.001437068
 texture = ExtResource("14_mountain2")
 
-
 [node name="StartMarker" type="Marker2D" parent="." unique_id=1855019591]
 unique_name_in_owner = true
 position = Vector2(120, 130)
 
-[node name="DeathZone" parent="." node_paths=PackedStringArray("respawn_marker") instance=ExtResource("9_death")]
-position = Vector2(1200, 850)
+[node name="DeathZone" parent="." unique_id=1245395156 node_paths=PackedStringArray("respawn_marker") instance=ExtResource("9_death")]
+position = Vector2(1326, 788)
+scale = Vector2(3.68, 1)
 respawn_marker = NodePath("../StartMarker")
 
-[node name="CollisionShape2D" parent="DeathZone" index="0"]
-shape = SubResource("RectangleShape2D_death_tutorial")
-
 [node name="WaterSurface" parent="." unique_id=313835308 instance=ExtResource("4_water")]
-position = Vector2(285, 212)
+position = Vector2(152.99997, 175.99997)
 rotation = 0.230383
-water_width = 580.0
-water_depth = 74.0
+water_width = 918.69
+water_depth = 700.0
 surface_y = -36.0
 current_flow_speed = 195.0
 current_force = 220.0
@@ -189,7 +183,7 @@ position = Vector2(902, 334)
 position = Vector2(1144.9999, 418)
 rotation = 0.230383
 water_width = 580.0
-water_depth = 74.0
+water_depth = 700.0
 surface_y = -36.0
 current_flow_speed = 195.0
 current_force = 220.0
@@ -222,6 +216,7 @@ unique_name_in_owner = true
 
 [node name="TutorialTriggers" type="Node2D" parent="." unique_id=1025217352]
 unique_name_in_owner = true
+visible = false
 
 [node name="StartSlidePrompt" type="Area2D" parent="TutorialTriggers" unique_id=3412792]
 position = Vector2(106, 86)
@@ -303,7 +298,7 @@ shape = SubResource("RectangleShape2D_prompt_wide")
 position = Vector2(2155.9998, 559)
 rotation = 0.230383
 water_width = 960.0
-water_depth = 74.0
+water_depth = 500.0
 surface_y = -36.0
 current_flow_speed = 195.0
 current_force = 220.0

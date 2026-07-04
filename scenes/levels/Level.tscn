@@ -363,16 +363,15 @@ rotation = 0.08
 scale = Vector2(0.76, 1.15)
 texture = ExtResource("12_mountain4")
 
-
 [node name="StartMarker" type="Marker2D" parent="." unique_id=1082883030]
 unique_name_in_owner = true
 position = Vector2(120, 130)
 
 [node name="WaterSurface" parent="." unique_id=194159359 instance=ExtResource("2_a3ws7")]
-position = Vector2(219.99997, 364.99997)
+position = Vector2(375.00003, 395)
 rotation = 0.244979
-water_width = 560.0
-water_depth = 72.0
+water_width = 1412.81
+water_depth = 500.0
 surface_y = -36.0
 wave_amplitude = 9.0
 secondary_wave_amplitude = 4.0
@@ -383,23 +382,36 @@ max_buoyancy_force = 11130.0
 enable_waterfall = false
 
 [node name="HookPointA" parent="." unique_id=329637448 instance=ExtResource("3_iv3rn")]
-position = Vector2(732, 338)
+position = Vector2(1210, 445)
 
 [node name="HookPointB" parent="." unique_id=1824416324 instance=ExtResource("3_iv3rn")]
-position = Vector2(1552, 530)
+position = Vector2(2603, 789)
+
+[node name="HookPointB3" parent="." unique_id=550695079 instance=ExtResource("3_iv3rn")]
+position = Vector2(2939, 1697)
+
+[node name="HookPointB4" parent="." unique_id=382217012 instance=ExtResource("3_iv3rn")]
+position = Vector2(3190, 1707)
+
+[node name="HookPointB5" parent="." unique_id=1578432561 instance=ExtResource("3_iv3rn")]
+position = Vector2(3431, 1717)
 
 [node name="WaveChaser" parent="." unique_id=10999686 instance=ExtResource("4_litjp")]
 position = Vector2(-120, 270)
 
 [node name="Obstacle" parent="." unique_id=66557457 instance=ExtResource("5_mn2x6")]
-position = Vector2(1009, 285)
+position = Vector2(1597, 450)
 
 [node name="CanCollectible" parent="." unique_id=1479361518 instance=ExtResource("6_wlcp4")]
-position = Vector2(1063, 450)
+position = Vector2(1068, 400)
+
+[node name="CanCollectible2" parent="." unique_id=603378020 instance=ExtResource("6_wlcp4")]
+position = Vector2(2873, 694)
 
 [node name="FinishArea" type="Area2D" parent="." unique_id=1950458681]
 unique_name_in_owner = true
-position = Vector2(1950, 175)
+position = Vector2(4491, 1576.0001)
+scale = Vector2(1, 6.319995)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FinishArea" unique_id=1897859782]
 shape = SubResource("RectangleShape2D_finish")
@@ -409,10 +421,24 @@ color = Color(0.24, 0.76, 0.36, 0.35)
 polygon = PackedVector2Array(-40, -85, 40, -85, 40, 85, -40, 85)
 
 [node name="WaterSurface2" parent="." unique_id=155695590 instance=ExtResource("2_a3ws7")]
-position = Vector2(1162.9999, 593.99994)
+position = Vector2(2014.9999, 774.99994)
 rotation = 0.2491292
-water_width = 560.0
-water_depth = 72.0
+water_width = 1000.0
+water_depth = 500.0
+surface_y = -36.0
+wave_amplitude = 9.0
+secondary_wave_amplitude = 4.0
+current_flow_speed = 220.0
+current_force = 220.0
+buoyancy_force = 5000.0
+max_buoyancy_force = 11130.0
+enable_waterfall = false
+
+[node name="WaterSurface5" parent="." unique_id=1903751688 instance=ExtResource("2_a3ws7")]
+position = Vector2(3979.0005, 1920.0001)
+rotation = 0.012546651
+water_width = 1000.0
+water_depth = 253.58
 surface_y = -36.0
 wave_amplitude = 9.0
 secondary_wave_amplitude = 4.0
@@ -423,13 +449,13 @@ max_buoyancy_force = 11130.0
 enable_waterfall = false
 
 [node name="Obstacle2" parent="." unique_id=1626380398 instance=ExtResource("5_mn2x6")]
-position = Vector2(1747, 502)
+position = Vector2(2958, 823)
 
 [node name="NPC_RescueTest" parent="." unique_id=252872777 instance=ExtResource("7_a3ws7")]
-position = Vector2(1156, 561)
+position = Vector2(1728, 675)
 
 [node name="DeathZone" parent="." unique_id=724025732 node_paths=PackedStringArray("respawn_marker") instance=ExtResource("8_iv3rn")]
-position = Vector2(648, 673)
+position = Vector2(1246, 778)
 rotation = 0.2655507
 respawn_marker = NodePath("StartMarker2")
 
@@ -437,3 +463,46 @@ respawn_marker = NodePath("StartMarker2")
 unique_name_in_owner = true
 position = Vector2(218.77106, -296.8185)
 rotation = -0.2655507
+
+[node name="HookPointB2" parent="." unique_id=695728318 instance=ExtResource("3_iv3rn")]
+position = Vector2(3152, 830)
+
+[node name="WaterSurface3" parent="." unique_id=1172807446 instance=ExtResource("2_a3ws7")]
+position = Vector2(2993.0002, 1183)
+rotation = -0.5115192
+scale = Vector2(-1, 1)
+water_width = 1000.0
+water_depth = 72.0
+surface_y = -36.0
+wave_amplitude = 9.0
+secondary_wave_amplitude = 4.0
+current_flow_speed = 260.0
+buoyancy_force = 5000.0
+max_buoyancy_force = 11130.0
+enable_waterfall = false
+
+[node name="WaterSurface4" parent="." unique_id=1449514633 instance=ExtResource("2_a3ws7")]
+position = Vector2(2310, 1621.0001)
+rotation = 0.37436134
+water_width = 1000.0
+water_depth = 72.0
+surface_y = -36.0
+wave_amplitude = 9.0
+secondary_wave_amplitude = 4.0
+current_flow_speed = 260.0
+buoyancy_force = 5000.0
+max_buoyancy_force = 11130.0
+enable_waterfall = false
+
+[node name="WaterSurface6" parent="." unique_id=1902300698 instance=ExtResource("2_a3ws7")]
+position = Vector2(3976, 1490.0001)
+rotation = 0.00701946
+water_width = 1000.0
+water_depth = 72.0
+surface_y = -36.0
+wave_amplitude = 9.0
+secondary_wave_amplitude = 4.0
+current_flow_speed = 260.0
+buoyancy_force = 5000.0
+max_buoyancy_force = 11130.0
+enable_waterfall = false
