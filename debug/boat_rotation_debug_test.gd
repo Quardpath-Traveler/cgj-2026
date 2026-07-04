@@ -17,8 +17,8 @@ enum Phase {
 @export var wait_seconds: float = 0.1
 @export var hold_d_seconds: float = 1.0
 @export var input_settle_seconds: float = 0.05
-@export var reset_rotation_tolerance: float = 0.1
-@export var reset_angular_velocity_tolerance: float = 1.0
+@export var reset_rotation_tolerance: float = 2.0
+@export var reset_angular_velocity_tolerance: float = 2.0
 
 var _debug: BoatRotationDebug
 var _boat: Boat
