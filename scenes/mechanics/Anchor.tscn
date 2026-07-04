@@ -42,6 +42,6 @@ position = Vector2(32, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Head"]
 shape = SubResource("CircleShape2D_head")
 
-[node name="AnchorSprite" type="Sprite2D" parent="Head"]
-scale = Vector2(0.06, 0.06)
+[node name="AnchorSprite" type="Sprite2D" parent="Head" unique_id=48152984]
+scale = Vector2(0.08355092, 0.083550915)
 texture = ExtResource("2_anchor_texture")
