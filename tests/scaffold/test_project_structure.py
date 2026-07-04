@@ -465,6 +465,7 @@ class ProjectStructureTest(unittest.TestCase):
             "func _process(delta: float)",
             "func _physics_process(_delta: float)",
             "func _draw()",
+            "func _draw_water_body_gradient(surface_points: PackedVector2Array) -> void",
             "func get_surface_depth_at_global_position(global_position: Vector2) -> float",
             "func get_water_up_direction() -> Vector2",
             "func get_water_flow_direction() -> Vector2",
@@ -481,7 +482,9 @@ class ProjectStructureTest(unittest.TestCase):
             "edge_point + water_flow_direction * waterfall_lip_length",
             "get_overlapping_bodies()",
             "queue_redraw()",
-            "draw_colored_polygon",
+            "draw_polygon(fill_points, PackedColorArray",
+            "water_color",
+            "deep_water_color",
             "draw_polyline",
             "draw_arc",
             "apply_central_force",
@@ -555,6 +558,7 @@ class ProjectStructureTest(unittest.TestCase):
 
     def test_anchor_throw_uses_parabola_slack_chain_and_debug_logs(self):
         script = self.read("scripts/mechanics/anchor.gd")
+        anchor_scene = self.read("scenes/mechanics/Anchor.tscn")
         debug_scene = self.read("debug/AnchorThrowRegression.tscn")
         debug_script = self.read("debug/anchor_throw_regression.gd")
 
@@ -577,8 +581,24 @@ class ProjectStructureTest(unittest.TestCase):
             "func _get_rope_slack_offset",
             "JSON.stringify(get_anchor_log_data())",
             "rope_line.points = _build_slack_rope_points",
+            "@export var aim_indicator_length",
+            "@export var aim_indicator_head_length",
+            "@onready var aim_direction_line: Line2D = %AimDirectionLine",
+            "@onready var aim_direction_head: Line2D = %AimDirectionHead",
+            "func update_aim_target(target_position: Vector2) -> void",
+            "func _update_aim_indicator(target_position: Vector2) -> void",
+            "func _hide_aim_indicator() -> void",
+            "aim_direction_line.points = PackedVector2Array",
+            "aim_direction_head.points = PackedVector2Array",
         ]:
             self.assertIn(expected, script)
+
+        for expected in [
+            '[node name="AimDirectionLine" type="Line2D" parent="."]',
+            '[node name="AimDirectionHead" type="Line2D" parent="."]',
+            "visible = false",
+        ]:
+            self.assertIn(expected, anchor_scene)
 
         self.assertNotIn("global_position += launch_velocity * delta", script)
         for removed_charge in [
@@ -663,6 +683,8 @@ class ProjectStructureTest(unittest.TestCase):
             "var _anchor_swing_target_rotation",
             "@onready var anchor: Variant = %Anchor",
             "func _unhandled_input(event: InputEvent)",
+            "func _update_anchor_aim_target() -> void",
+            "anchor.update_aim_target(get_global_mouse_position())",
             "event.is_action_pressed(\"confirm\")",
             "event.is_action_released(\"confirm\")",
             "anchor.start_aim()",

@@ -35,6 +35,7 @@ script = ExtResource("1_playtest")
 [node name="PauseMenu" parent="." unique_id=1998646878 instance=ExtResource("6_pause")]
 
 [node name="Sky" type="Sprite2D" parent="." unique_id=135879394]
+visible = false
 show_behind_parent = true
 position = Vector2(1147, -135)
 rotation = 0.0012651181
@@ -42,6 +43,7 @@ scale = Vector2(1.4472903, 1.413475)
 texture = ExtResource("7_o76vf")
 
 [node name="Mountain5" type="Sprite2D" parent="." unique_id=550063308]
+visible = false
 show_behind_parent = true
 position = Vector2(375.69434, 106.024445)
 rotation = 0.22057043
@@ -58,6 +60,7 @@ skew = 0.004028797
 texture = ExtResource("9_cijap")
 
 [node name="Mountain1" type="Sprite2D" parent="." unique_id=1643932369]
+visible = false
 show_behind_parent = true
 position = Vector2(-39.36966, 53.146233)
 rotation = 0.22535998
@@ -65,6 +68,7 @@ scale = Vector2(0.5192233, 0.40910587)
 texture = ExtResource("8_a7j4m")
 
 [node name="Mountain3" type="Sprite2D" parent="." unique_id=629827061]
+visible = false
 show_behind_parent = true
 position = Vector2(759.1619, 139.4498)
 rotation = 0.24487086
@@ -80,6 +84,7 @@ skew = 0.040261865
 texture = ExtResource("10_lpd8t")
 
 [node name="FillGaps2" type="Sprite2D" parent="." unique_id=1161930216]
+visible = false
 show_behind_parent = true
 position = Vector2(1575.8416, 546.98883)
 rotation = 0.07024907
@@ -87,6 +92,7 @@ scale = Vector2(0.60272515, 0.5865994)
 texture = ExtResource("13_r2nlr")
 
 [node name="Mountain4" type="Sprite2D" parent="FillGaps2" unique_id=645979926]
+visible = false
 position = Vector2(-53.534424, -445.5657)
 rotation = -0.027231358
 scale = Vector2(1.0500249, 1.897762)
@@ -94,12 +100,14 @@ skew = 0.001437068
 texture = ExtResource("9_uvx3l")
 
 [node name="Cloud4" type="Sprite2D" parent="." unique_id=1110380068]
+visible = false
 position = Vector2(94.83768, -109.23233)
 rotation = 0.42177102
 scale = Vector2(0.5212769, 0.5324004)
 texture = ExtResource("10_nuvnh")
 
 [node name="Cloud1" type="Sprite2D" parent="Cloud4" unique_id=778444420]
+visible = false
 position = Vector2(655.4195, -295.6978)
 rotation = -0.24932583
 scale = Vector2(0.9983449, 1.0198972)
@@ -107,6 +115,7 @@ skew = -0.010286808
 texture = ExtResource("12_245a7")
 
 [node name="Cloud5" type="Sprite2D" parent="Cloud4" unique_id=310809087]
+visible = false
 position = Vector2(1627.1222, -689.6507)
 rotation = -0.17658599
 scale = Vector2(1.6631638, 1.5818046)
@@ -114,6 +123,7 @@ skew = -0.0074493885
 texture = ExtResource("10_nuvnh")
 
 [node name="Cloud6" type="Sprite2D" parent="Cloud4" unique_id=580059573]
+visible = false
 position = Vector2(1043.4337, -293.23102)
 rotation = -0.14889663
 scale = Vector2(1.3840529, 1.1767558)
@@ -121,6 +131,7 @@ skew = -0.006321907
 texture = ExtResource("13_qod33")
 
 [node name="Cloud7" type="Sprite2D" parent="Cloud4" unique_id=1670614540]
+visible = false
 position = Vector2(-598.09125, -81.455505)
 rotation = -0.13360508
 scale = Vector2(1.4538541, 1.3581716)
@@ -128,6 +139,7 @@ skew = -0.005690098
 texture = ExtResource("10_nuvnh")
 
 [node name="Cloud8" type="Sprite2D" parent="Cloud4" unique_id=1168342031]
+visible = false
 position = Vector2(-385.14618, -38.24646)
 rotation = -0.17366457
 scale = Vector2(1.2599287, 1.3400551)
@@ -135,6 +147,7 @@ skew = -0.0073314905
 texture = ExtResource("13_qod33")
 
 [node name="Cloud3" type="Sprite2D" parent="Cloud4" unique_id=1546341553]
+visible = false
 position = Vector2(1352.5848, -875.78595)
 rotation = -0.4139401
 scale = Vector2(1.9117076, 1.8850619)
@@ -142,6 +155,7 @@ skew = -0.015772581
 texture = ExtResource("12_245a7")
 
 [node name="Cloud9" type="Sprite2D" parent="Cloud4" unique_id=375833799]
+visible = false
 position = Vector2(62.794106, -464.91528)
 rotation = -0.23492171
 scale = Vector2(1.2630699, 1.1455039)
@@ -149,11 +163,13 @@ skew = -0.009741306
 texture = ExtResource("11_qod33")
 
 [node name="Born" type="Sprite2D" parent="." unique_id=1245777604]
+visible = false
 position = Vector2(658, 165)
 scale = Vector2(0.49143854, 0.49143854)
 texture = ExtResource("16_csaak")
 
 [node name="Born2" type="Sprite2D" parent="." unique_id=1278048120]
+visible = false
 position = Vector2(1568, 388.99997)
 scale = Vector2(0.6025652, 0.54708916)
 texture = ExtResource("16_csaak")
