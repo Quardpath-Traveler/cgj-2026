@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://debug/ui/DebugValuePanel.gd" id="1_value"]
+
+[node name="DebugValuePanel" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_value")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 10.0
+offset_bottom = 10.0

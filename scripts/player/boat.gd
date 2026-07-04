@@ -5,6 +5,8 @@ signal crew_count_changed(count: int)
 signal crew_lost(count: int)
 
 @export var airborne_rotation_torque: float = 90000.0
+@export var counter_rotation_boost: float = 2.0
+@export var counter_rotation_zero_threshold: float = 0.05
 @export var airborne_nose_down_torque: float = 18000.0
 @export var airborne_nose_down_damping: float = 1200.0
 @export var posture_logging_enabled: bool = true
@@ -17,7 +19,8 @@ signal crew_lost(count: int)
 @export var swing_turnaround_speed: float = 40.0
 @export var anchor_swing_alignment_torque: float = 48.0
 @export var anchor_swing_alignment_damping: float = 0.2
-@export var anchor_swing_alignment_max_angular_velocity: float = 12.0
+@export var anchor_swing_alignment_max_angular_velocity: float = 9.0
+@export var max_angular_velocity: float = 9.0
 @export var anchor_swing_target_turn_speed: float = 10.0
 @export var crew_count: int = 3:
 	set(value):
@@ -34,6 +37,7 @@ var _has_anchor_swing_target_rotation: bool = false
 var _manual_bullet_time_target_scale: float = 1.0
 var _manual_bullet_time_start_scale: float = 1.0
 var _manual_bullet_time_transition_elapsed: float = 0.0
+var _is_counter_rotation_boost_active: bool = false
 
 @onready var anchor: Variant = %Anchor
 
@@ -56,7 +60,11 @@ func _physics_process(delta: float) -> void:
 		if not anchor.is_hooked():
 			_apply_airborne_nose_down()
 		if not is_zero_approx(rotation_input):
-			apply_torque(rotation_input * airborne_rotation_torque)
+			_update_counter_rotation_boost(rotation_input)
+			var torque := airborne_rotation_torque
+			if _is_counter_rotation_boost_active:
+				torque *= counter_rotation_boost
+			apply_torque(rotation_input * torque)
 
 	_update_posture_log(delta)
 
@@ -74,6 +82,11 @@ func _unhandled_input(event: InputEvent) -> void:
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	_contact_count = state.get_contact_count()
 	_apply_anchor_constraint(state)
+	state.angular_velocity = clampf(
+		state.angular_velocity,
+		-max_angular_velocity,
+		max_angular_velocity
+	)
 
 
 func is_airborne() -> bool:
@@ -304,6 +317,25 @@ func _apply_airborne_nose_down() -> void:
 		- angular_velocity * airborne_nose_down_damping
 	)
 	apply_torque(nose_down_torque)
+
+
+func _update_counter_rotation_boost(input: float) -> void:
+	if is_zero_approx(input):
+		_is_counter_rotation_boost_active = false
+		return
+
+	if absf(angular_velocity) <= counter_rotation_zero_threshold:
+		return
+
+	var velocity_sign := signf(angular_velocity)
+	var input_sign := signf(input)
+
+	if _is_counter_rotation_boost_active:
+		if velocity_sign == input_sign:
+			_is_counter_rotation_boost_active = false
+	else:
+		if velocity_sign != input_sign:
+			_is_counter_rotation_boost_active = true
 
 
 func _update_posture_log(delta: float) -> void:
