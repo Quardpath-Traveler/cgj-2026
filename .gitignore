@@ -14,3 +14,8 @@ __pycache__/
 
 # Git worktrees
 .worktree/
+# WorkBuddy workspace
+.workbuddy/
+
+# WorkBuddy generated plans
+docs/superpowers/
