@@ -46,6 +46,9 @@ func _compute_applied_torque(input: float) -> float:
 	return 0.0
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _boat == null or not is_instance_valid(_boat):
+		return
+
 	if event.is_action_pressed("ui_page_up"):
 		_boat.airborne_rotation_torque += rotation_torque_step
 	elif event.is_action_pressed("ui_page_down"):
