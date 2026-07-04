@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nkw1vd8yf7le"
-path="res://.godot/imported/sailor.png-f09c1c1134ee1d778a3a22b916c3354f.ctex"
+uid="uid://bi5xp8mkoorfu"
+path="res://.godot/imported/fill gaps.png-71023472815bf4f6994c6c50a18b56e2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/Character Art Assets/Protagonist Assets/sailor.png"
-dest_files=["res://.godot/imported/sailor.png-f09c1c1134ee1d778a3a22b916c3354f.ctex"]
+source_file="res://assets/art/Scene Assets/mountain/fill gaps.png"
+dest_files=["res://.godot/imported/fill gaps.png-71023472815bf4f6994c6c50a18b56e2.ctex"]
 
 [params]
 

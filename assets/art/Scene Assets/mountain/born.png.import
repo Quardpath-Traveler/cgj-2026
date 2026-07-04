@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8yq6b7u70to"
-path="res://.godot/imported/mountain1.png-72d84b0ba1dff15c393ed0f1227b2eea.ctex"
+uid="uid://ce0nilw87m67j"
+path="res://.godot/imported/born.png-822f40d7884ba657cfaeb9f150a2406e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/Scene Assets/mountain1.png"
-dest_files=["res://.godot/imported/mountain1.png-72d84b0ba1dff15c393ed0f1227b2eea.ctex"]
+source_file="res://assets/art/Scene Assets/mountain/born.png"
+dest_files=["res://.godot/imported/born.png-822f40d7884ba657cfaeb9f150a2406e.ctex"]
 
 [params]
 

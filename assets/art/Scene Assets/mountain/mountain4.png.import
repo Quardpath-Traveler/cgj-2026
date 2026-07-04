@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nkw1vd8yf7le"
-path="res://.godot/imported/sailor.png-f09c1c1134ee1d778a3a22b916c3354f.ctex"
+uid="uid://bjb06b5emi0dx"
+path="res://.godot/imported/mountain4.png-80d39acb704c62e1293a16bcb595c2fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/Character Art Assets/Protagonist Assets/sailor.png"
-dest_files=["res://.godot/imported/sailor.png-f09c1c1134ee1d778a3a22b916c3354f.ctex"]
+source_file="res://assets/art/Scene Assets/mountain/mountain4.png"
+dest_files=["res://.godot/imported/mountain4.png-80d39acb704c62e1293a16bcb595c2fb.ctex"]
 
 [params]
 
