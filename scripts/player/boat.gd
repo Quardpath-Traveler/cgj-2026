@@ -23,6 +23,10 @@ signal crew_lost(count: int)
 @export var max_angular_velocity: float = 9.0
 @export var anchor_swing_target_turn_speed: float = 10.0
 @export var max_linear_speed: float = 0.0
+@export var bad_landing_righting_torque: float = 80000.0
+@export var bad_landing_righting_duration: float = 0.5
+@export var bad_landing_righting_damping: float = 3200.0
+@export var bad_landing_min_trigger_interval: float = 0.3
 @export var crew_count: int = 3:
 	set(value):
 		crew_count = max(value, 0)
@@ -39,6 +43,10 @@ var _manual_bullet_time_target_scale: float = 1.0
 var _manual_bullet_time_start_scale: float = 1.0
 var _manual_bullet_time_transition_elapsed: float = 0.0
 var _is_counter_rotation_boost_active: bool = false
+var _righting_timer: float = 0.0
+var _righting_target_rotation: float = 0.0
+var _last_bad_landing_water: Node2D = null
+var _last_bad_landing_time: float = -1000.0
 
 @onready var anchor: Variant = %Anchor
 
@@ -83,6 +91,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	_contact_count = state.get_contact_count()
 	_apply_anchor_constraint(state)
+	_apply_bad_landing_righting(state)
 	state.angular_velocity = clampf(
 		state.angular_velocity,
 		-max_angular_velocity,
@@ -148,12 +157,39 @@ func lose_crew(amount: int = 1) -> void:
 		crew_lost.emit(crew_count)
 
 
+func on_bad_landing(angle_degrees: float, target_rotation: float, water_surface: Node2D) -> void:
+	if water_surface == _last_bad_landing_water:
+		if Time.get_ticks_msec() / 1000.0 - _last_bad_landing_time < bad_landing_min_trigger_interval:
+			return
+
+	lose_crew(1)
+	_righting_timer = bad_landing_righting_duration
+	_righting_target_rotation = target_rotation
+	_last_bad_landing_water = water_surface
+	_last_bad_landing_time = Time.get_ticks_msec() / 1000.0
+
+
 func _limit_linear_speed(state: PhysicsDirectBodyState2D) -> void:
 	if max_linear_speed <= 0.0:
 		return
 
 	if state.linear_velocity.length() > max_linear_speed:
 		state.linear_velocity = state.linear_velocity.normalized() * max_linear_speed
+
+
+func _apply_bad_landing_righting(state: PhysicsDirectBodyState2D) -> void:
+	if _righting_timer <= 0.0:
+		return
+
+	_righting_timer -= state.step
+	var decay := clampf(_righting_timer / bad_landing_righting_duration, 0.0, 1.0)
+
+	var rotation_error := wrapf(state.transform.get_rotation() - _righting_target_rotation, -PI, PI)
+	var righting_torque := (
+		-rotation_error * bad_landing_righting_torque * decay
+		- state.angular_velocity * bad_landing_righting_damping * decay
+	)
+	state.apply_torque(righting_torque)
 
 
 func _apply_anchor_constraint(state: PhysicsDirectBodyState2D) -> void:
