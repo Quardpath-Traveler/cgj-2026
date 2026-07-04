@@ -8,7 +8,18 @@
 [ext_resource type="PackedScene" path="res://scenes/level_parts/Obstacle.tscn" id="6_obstacle"]
 [ext_resource type="PackedScene" path="res://scenes/items/CanCollectible.tscn" id="7_can"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TutorialPrompt.tscn" id="8_prompt"]
-[ext_resource type="PackedScene" uid="uid://tRLM6HrD4JUa8" path="res://scenes/mechanics/DeathZone.tscn" id="9_death"]
+[ext_resource type="PackedScene" path="res://scenes/mechanics/DeathZone.tscn" id="9_death"]
+[ext_resource type="Texture2D" uid="uid://bc7w5dhl4757f" path="res://assets/art/Scene Assets/sky.png" id="10_sky"]
+[ext_resource type="Texture2D" uid="uid://cx6rdyh1qy5xs" path="res://assets/art/Scene Assets/mountain/mountain3.png" id="11_mountain3"]
+[ext_resource type="Texture2D" uid="uid://c8yq6b7u70to" path="res://assets/art/Scene Assets/mountain/mountain1.png" id="12_mountain1"]
+[ext_resource type="Texture2D" uid="uid://bjb06b5emi0dx" path="res://assets/art/Scene Assets/mountain/mountain4.png" id="13_mountain4"]
+[ext_resource type="Texture2D" uid="uid://btpg8gr0capux" path="res://assets/art/Scene Assets/mountain/mountain2.png" id="14_mountain2"]
+[ext_resource type="Texture2D" uid="uid://bi5xp8mkoorfu" path="res://assets/art/Scene Assets/mountain/fill gaps.png" id="15_fill_gaps"]
+[ext_resource type="Texture2D" uid="uid://8m6bvmji25dc" path="res://assets/art/Scene Assets/cloud/cloud4.png" id="16_cloud4"]
+[ext_resource type="Texture2D" uid="uid://dis2t2a8omjtm" path="res://assets/art/Scene Assets/cloud/cloud2.png" id="17_cloud2"]
+[ext_resource type="Texture2D" uid="uid://bkoqshsjfemj0" path="res://assets/art/Scene Assets/cloud/cloud1.png" id="18_cloud1"]
+[ext_resource type="Texture2D" uid="uid://hmlsgcmc8sjd" path="res://assets/art/Scene Assets/cloud/cloud5.png" id="19_cloud5"]
+[ext_resource type="Texture2D" uid="uid://r2heekhlan7s" path="res://assets/art/Scene Assets/mountain/fill gaps2.png" id="20_fill_gaps2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_finish"]
 size = Vector2(90, 190)
@@ -19,28 +30,139 @@ size = Vector2(180, 180)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prompt_wide"]
 size = Vector2(260, 200)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_death_tutorial"]
-size = Vector2(3000, 200)
-
 [node name="TutorialLevel" type="Node2D" unique_id=226315810]
 script = ExtResource("1_level")
+
+[node name="Background" type="Node2D" parent="." unique_id=1426198555]
+z_index = -100
+
+[node name="Sky" type="Sprite2D" parent="Background" unique_id=1790350994]
+position = Vector2(1147, -135)
+rotation = 0.0012651181
+scale = Vector2(1.4472903, 1.413475)
+texture = ExtResource("10_sky")
+
+[node name="Clouds" type="Node2D" parent="Background" unique_id=1672533211]
+z_index = 10
+
+[node name="Cloud4" type="Sprite2D" parent="Background/Clouds" unique_id=623186522]
+position = Vector2(94.83768, -109.23233)
+rotation = 0.42177102
+scale = Vector2(0.5212769, 0.5324004)
+texture = ExtResource("16_cloud4")
+
+[node name="Cloud1" type="Sprite2D" parent="Background/Clouds/Cloud4" unique_id=1773469772]
+position = Vector2(655.4195, -295.6978)
+rotation = -0.24932583
+scale = Vector2(0.9983449, 1.0198972)
+skew = -0.010286808
+texture = ExtResource("18_cloud1")
+
+[node name="Cloud5" type="Sprite2D" parent="Background/Clouds/Cloud4" unique_id=167383382]
+position = Vector2(1627.1222, -689.6507)
+rotation = -0.17658599
+scale = Vector2(1.6631638, 1.5818046)
+skew = -0.0074493885
+texture = ExtResource("16_cloud4")
+
+[node name="Cloud6" type="Sprite2D" parent="Background/Clouds/Cloud4" unique_id=534519101]
+position = Vector2(1043.4337, -293.23102)
+rotation = -0.14889663
+scale = Vector2(1.3840529, 1.1767558)
+skew = -0.006321907
+texture = ExtResource("19_cloud5")
+
+[node name="Cloud7" type="Sprite2D" parent="Background/Clouds/Cloud4" unique_id=1483913855]
+position = Vector2(-598.09125, -81.455505)
+rotation = -0.13360508
+scale = Vector2(1.4538541, 1.3581716)
+skew = -0.005690098
+texture = ExtResource("16_cloud4")
+
+[node name="Cloud8" type="Sprite2D" parent="Background/Clouds/Cloud4" unique_id=1607546558]
+position = Vector2(-385.14618, -38.24646)
+rotation = -0.17366457
+scale = Vector2(1.2599287, 1.3400551)
+skew = -0.0073314905
+texture = ExtResource("19_cloud5")
+
+[node name="Cloud3" type="Sprite2D" parent="Background/Clouds/Cloud4" unique_id=1467371035]
+position = Vector2(1352.5848, -875.78595)
+rotation = -0.4139401
+scale = Vector2(1.9117076, 1.8850619)
+skew = -0.015772581
+texture = ExtResource("18_cloud1")
+
+[node name="Cloud9" type="Sprite2D" parent="Background/Clouds/Cloud4" unique_id=1873748717]
+position = Vector2(62.794106, -464.91528)
+rotation = -0.23492171
+scale = Vector2(1.2630699, 1.1455039)
+skew = -0.009741306
+texture = ExtResource("17_cloud2")
+
+[node name="Mountains" type="Node2D" parent="Background" unique_id=1758376664]
+z_index = 20
+
+[node name="Mountain5" type="Sprite2D" parent="Background/Mountains" unique_id=1990790964]
+position = Vector2(375.69434, 106.024445)
+rotation = 0.22057043
+scale = Vector2(0.58498687, 0.6235519)
+skew = 0.0102574825
+texture = ExtResource("11_mountain3")
+
+[node name="Mountain6" type="Sprite2D" parent="Background/Mountains/Mountain5" unique_id=864629096]
+position = Vector2(1296.8466, 52.63069)
+rotation = 0.02171105
+scale = Vector2(1.3337883, 0.73013884)
+skew = 0.004028797
+texture = ExtResource("13_mountain4")
+
+[node name="Mountain1" type="Sprite2D" parent="Background/Mountains" unique_id=1523925066]
+position = Vector2(-39.36966, 53.146233)
+rotation = 0.22535998
+scale = Vector2(0.5192233, 0.40910587)
+texture = ExtResource("12_mountain1")
+
+[node name="Mountain3" type="Sprite2D" parent="Background/Mountains" unique_id=864193041]
+position = Vector2(759.1619, 139.4498)
+rotation = 0.24487086
+scale = Vector2(0.5703404, 1.2148749)
+texture = ExtResource("14_mountain2")
+
+[node name="FillGaps" type="Sprite2D" parent="Background/Mountains/Mountain3" unique_id=312093964]
+position = Vector2(79.41333, 288.95316)
+rotation = 0.011394596
+scale = Vector2(0.85224336, 0.5414064)
+skew = 0.040261865
+texture = ExtResource("15_fill_gaps")
+
+[node name="FillGaps2" type="Sprite2D" parent="Background/Mountains" unique_id=1019809457]
+position = Vector2(1575.8416, 546.98883)
+rotation = 0.07024907
+scale = Vector2(0.60272515, 0.5865994)
+texture = ExtResource("20_fill_gaps2")
+
+[node name="Mountain4" type="Sprite2D" parent="Background/Mountains/FillGaps2" unique_id=601034913]
+position = Vector2(-53.534424, -445.5657)
+rotation = -0.027231358
+scale = Vector2(1.0500249, 1.897762)
+skew = 0.001437068
+texture = ExtResource("14_mountain2")
 
 [node name="StartMarker" type="Marker2D" parent="." unique_id=1855019591]
 unique_name_in_owner = true
 position = Vector2(120, 130)
 
-[node name="DeathZone" parent="." node_paths=PackedStringArray("respawn_marker") instance=ExtResource("9_death")]
-position = Vector2(1200, 850)
+[node name="DeathZone" parent="." unique_id=1245395156 node_paths=PackedStringArray("respawn_marker") instance=ExtResource("9_death")]
+position = Vector2(1326, 788)
+scale = Vector2(3.68, 1)
 respawn_marker = NodePath("../StartMarker")
 
-[node name="CollisionShape2D" parent="DeathZone" index="0"]
-shape = SubResource("RectangleShape2D_death_tutorial")
-
 [node name="WaterSurface" parent="." unique_id=313835308 instance=ExtResource("4_water")]
-position = Vector2(285, 212)
+position = Vector2(152.99997, 175.99997)
 rotation = 0.230383
-water_width = 580.0
-water_depth = 74.0
+water_width = 918.69
+water_depth = 700.0
 surface_y = -36.0
 current_flow_speed = 195.0
 current_force = 220.0
@@ -61,7 +183,7 @@ position = Vector2(902, 334)
 position = Vector2(1144.9999, 418)
 rotation = 0.230383
 water_width = 580.0
-water_depth = 74.0
+water_depth = 700.0
 surface_y = -36.0
 current_flow_speed = 195.0
 current_force = 220.0
@@ -94,6 +216,7 @@ unique_name_in_owner = true
 
 [node name="TutorialTriggers" type="Node2D" parent="." unique_id=1025217352]
 unique_name_in_owner = true
+visible = false
 
 [node name="StartSlidePrompt" type="Area2D" parent="TutorialTriggers" unique_id=3412792]
 position = Vector2(106, 86)
@@ -175,7 +298,7 @@ shape = SubResource("RectangleShape2D_prompt_wide")
 position = Vector2(2155.9998, 559)
 rotation = 0.230383
 water_width = 960.0
-water_depth = 74.0
+water_depth = 500.0
 surface_y = -36.0
 current_flow_speed = 195.0
 current_force = 220.0

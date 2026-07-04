@@ -1,29 +1,29 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://d02drkeo2d52j"]
 
-[ext_resource type="Script" path="res://debug/debug_level.gd" id="1_debug"]
-[ext_resource type="PackedScene" path="res://scenes/levels/Level.tscn" id="2_level"]
-[ext_resource type="PackedScene" path="res://scenes/player/Boat.tscn" id="3_boat"]
-[ext_resource type="PackedScene" path="res://scenes/camera/GameCamera.tscn" id="4_camera"]
-[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="5_hud"]
-[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+[ext_resource type="Script" uid="uid://ca8ik08uwy0av" path="res://debug/debug_level.gd" id="1_debug"]
+[ext_resource type="PackedScene" uid="uid://cjaqahgf6j4f5" path="res://scenes/levels/Level.tscn" id="2_level"]
+[ext_resource type="PackedScene" uid="uid://cgdpl2y4glvwl" path="res://scenes/player/Boat.tscn" id="3_boat"]
+[ext_resource type="PackedScene" uid="uid://b1vag8n54dels" path="res://scenes/camera/GameCamera.tscn" id="4_camera"]
+[ext_resource type="PackedScene" uid="uid://cy254x0hrmji6" path="res://scenes/ui/HUD.tscn" id="5_hud"]
+[ext_resource type="PackedScene" uid="uid://chya0leno7ddn" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
 [ext_resource type="PackedScene" uid="uid://15x2tduve777" path="res://scenes/characters/NPC.tscn" id="7_npc"]
 
-[node name="DebugLevel" type="Node2D"]
+[node name="DebugLevel" type="Node2D" unique_id=799087990]
 script = ExtResource("1_debug")
 
-[node name="World" type="Node2D" parent="."]
+[node name="World" type="Node2D" parent="." unique_id=908269437]
 
-[node name="Level" parent="World" instance=ExtResource("2_level")]
+[node name="Level" parent="World" unique_id=397669392 instance=ExtResource("2_level")]
 
-[node name="NPC" parent="World/Level" instance=ExtResource("7_npc")]
+[node name="NPC" parent="World/Level" unique_id=287807003 instance=ExtResource("7_npc")]
 position = Vector2(220, 360)
-detection_area = NodePath("WaterDetector")
-sprite = NodePath("Sprite2D")
 
-[node name="Player" parent="." instance=ExtResource("3_boat")]
+[node name="Player" parent="." unique_id=1143123429 instance=ExtResource("3_boat")]
+position = Vector2(253.00003, 297)
+rotation = 0.30980417
 
-[node name="GameCamera" parent="Player" instance=ExtResource("4_camera")]
+[node name="GameCamera" parent="Player" unique_id=2059829106 instance=ExtResource("4_camera")]
 
-[node name="HUD" parent="." instance=ExtResource("5_hud")]
+[node name="HUD" parent="." unique_id=3284577 instance=ExtResource("5_hud")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+[node name="PauseMenu" parent="." unique_id=1858573615 instance=ExtResource("6_pause")]
