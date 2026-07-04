@@ -735,7 +735,7 @@ flip_h = true
 
 [node name="SafeHouse" type="Sprite2D" parent="." unique_id=209640384]
 top_level = true
-position = Vector2(4602, 1930)
+position = Vector2(4410, 1984)
 rotation = 0.007805596
 scale = Vector2(1.151165, 1.151165)
 texture = ExtResource("22_uhid2")
@@ -791,7 +791,7 @@ texture = ExtResource("14_fill_gaps")
 
 [node name="SafeHouse2" type="Sprite2D" parent="." unique_id=545174477]
 self_modulate = Color(1.1846329, 1.3783685, 1.3885652, 1)
-position = Vector2(4655, 1503)
+position = Vector2(4539, 1525.0001)
 rotation = 0.0078055966
 scale = Vector2(1.0805845, 1.0805844)
 texture = ExtResource("22_uhid2")
