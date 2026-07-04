@@ -284,11 +284,12 @@ func respawn_at(target_position: Vector2) -> void:
 
 
 func on_bad_landing(angle_degrees: float, target_rotation: float, water_surface: Node2D) -> void:
+	_reset_trick_tracking()
+
 	if water_surface == _last_bad_landing_water:
 		if Time.get_ticks_msec() / 1000.0 - _last_bad_landing_time < bad_landing_min_trigger_interval:
 			return
 
-	_reset_trick_tracking()
 	lose_crew(1)
 	_righting_timer = bad_landing_righting_duration
 	_righting_target_rotation = target_rotation

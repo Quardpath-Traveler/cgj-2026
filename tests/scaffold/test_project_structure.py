@@ -217,6 +217,14 @@ class ProjectStructureTest(unittest.TestCase):
         ]:
             self.assertIn(expected, water_script)
 
+        bad_landing_start = boat_script.index("func on_bad_landing")
+        bad_landing_end = boat_script.index("func on_safe_landing", bad_landing_start)
+        bad_landing_section = boat_script[bad_landing_start:bad_landing_end]
+        self.assertLess(
+            bad_landing_section.index("\t_reset_trick_tracking()"),
+            bad_landing_section.index("if water_surface == _last_bad_landing_water:"),
+        )
+
     def test_scene_script_references_are_present(self):
         expected_references = {
             "scenes/main/Main.tscn": "res://scripts/main/main.gd",
