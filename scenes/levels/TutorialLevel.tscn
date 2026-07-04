@@ -1,0 +1,186 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/tutorial_level.gd" id="1_level"]
+[ext_resource type="Script" path="res://scripts/levels/tutorial_trigger.gd" id="2_trigger"]
+[ext_resource type="PackedScene" path="res://scenes/mechanics/HookPoint.tscn" id="3_hook"]
+[ext_resource type="PackedScene" path="res://scenes/level_parts/WaterSurface.tscn" id="4_water"]
+[ext_resource type="PackedScene" path="res://scenes/level_parts/WaveChaser.tscn" id="5_wave"]
+[ext_resource type="PackedScene" path="res://scenes/level_parts/Obstacle.tscn" id="6_obstacle"]
+[ext_resource type="PackedScene" path="res://scenes/items/CanCollectible.tscn" id="7_can"]
+[ext_resource type="PackedScene" path="res://scenes/ui/TutorialPrompt.tscn" id="8_prompt"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_start_slope"]
+points = PackedVector2Array(-260, -20, 320, 116, 320, 166, -260, 30)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_landing_slope"]
+points = PackedVector2Array(-220, -16, 360, 80, 360, 132, -220, 36)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_final_slope"]
+points = PackedVector2Array(-240, -18, 380, 92, 380, 146, -240, 34)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prompt"]
+size = Vector2(180, 180)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prompt_wide"]
+size = Vector2(260, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_finish"]
+size = Vector2(90, 190)
+
+[node name="TutorialLevel" type="Node2D"]
+script = ExtResource("1_level")
+
+[node name="StartMarker" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(120, 130)
+
+[node name="StartSlope" type="StaticBody2D" parent="."]
+position = Vector2(250, 260)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StartSlope"]
+shape = SubResource("ConvexPolygonShape2D_start_slope")
+
+[node name="Visual" type="Polygon2D" parent="StartSlope"]
+color = Color(0.46, 0.38, 0.28, 1)
+polygon = PackedVector2Array(-260, -20, 320, 116, 320, 166, -260, 30)
+
+[node name="WaterSurface" parent="StartSlope" instance=ExtResource("4_water")]
+position = Vector2(35, 44)
+rotation = 0.230383
+water_width = 580.0
+water_depth = 74.0
+surface_y = -36.0
+current_flow_speed = 230.0
+buoyancy_force = 5000.0
+max_buoyancy_force = 11130.0
+
+[node name="HookPointThrowIntro" parent="." instance=ExtResource("3_hook")]
+position = Vector2(655, 275)
+
+[node name="LandingSlope" type="StaticBody2D" parent="."]
+position = Vector2(900, 318)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LandingSlope"]
+shape = SubResource("ConvexPolygonShape2D_landing_slope")
+
+[node name="Visual" type="Polygon2D" parent="LandingSlope"]
+color = Color(0.42, 0.36, 0.24, 1)
+polygon = PackedVector2Array(-220, -16, 360, 80, 360, 132, -220, 36)
+
+[node name="CanCollectible" parent="." instance=ExtResource("7_can")]
+position = Vector2(1030, 185)
+
+[node name="Obstacle" parent="." instance=ExtResource("6_obstacle")]
+position = Vector2(1120, 278)
+
+[node name="HookPointFinal" parent="." instance=ExtResource("3_hook")]
+position = Vector2(1390, 250)
+
+[node name="FinalSlope" type="StaticBody2D" parent="."]
+position = Vector2(1660, 365)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FinalSlope"]
+shape = SubResource("ConvexPolygonShape2D_final_slope")
+
+[node name="Visual" type="Polygon2D" parent="FinalSlope"]
+color = Color(0.36, 0.40, 0.26, 1)
+polygon = PackedVector2Array(-240, -18, 380, 92, 380, 146, -240, 34)
+
+[node name="WaveChaser" parent="." instance=ExtResource("5_wave")]
+unique_name_in_owner = true
+position = Vector2(-520, 275)
+chase_speed = 62.0
+max_distance_from_target = 740.0
+
+[node name="FinishArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(2050, 402)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FinishArea"]
+shape = SubResource("RectangleShape2D_finish")
+
+[node name="Visual" type="Polygon2D" parent="FinishArea"]
+color = Color(0.24, 0.76, 0.36, 0.35)
+polygon = PackedVector2Array(-45, -95, 45, -95, 45, 95, -45, 95)
+
+[node name="TutorialPrompt" parent="." instance=ExtResource("8_prompt")]
+unique_name_in_owner = true
+
+[node name="TutorialTriggers" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="StartSlidePrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(230, 155)
+script = ExtResource("2_trigger")
+prompt_text = "顺着坡道前进。"
+auto_hide_seconds = 2.4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/StartSlidePrompt"]
+shape = SubResource("RectangleShape2D_prompt")
+
+[node name="AimPrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(515, 205)
+script = ExtResource("2_trigger")
+prompt_text = "按住鼠标左键瞄准。"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/AimPrompt"]
+shape = SubResource("RectangleShape2D_prompt")
+
+[node name="ThrowPrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(610, 215)
+script = ExtResource("2_trigger")
+prompt_text = "松开发射锚。"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/ThrowPrompt"]
+shape = SubResource("RectangleShape2D_prompt")
+
+[node name="SwingPrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(705, 250)
+script = ExtResource("2_trigger")
+prompt_text = "勾住后让船甩起来。"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/SwingPrompt"]
+shape = SubResource("RectangleShape2D_prompt_wide")
+
+[node name="RecallPrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(850, 250)
+script = ExtResource("2_trigger")
+prompt_text = "再次点击收回锚，借惯性飞出去。"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/RecallPrompt"]
+shape = SubResource("RectangleShape2D_prompt_wide")
+
+[node name="AirControlPrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(980, 210)
+script = ExtResource("2_trigger")
+prompt_text = "空中按 A / D 调整船体倾角。"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/AirControlPrompt"]
+shape = SubResource("RectangleShape2D_prompt_wide")
+
+[node name="CollectObstaclePrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(1120, 230)
+script = ExtResource("2_trigger")
+prompt_text = "收集罐子，避开障碍。"
+auto_hide_seconds = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/CollectObstaclePrompt"]
+shape = SubResource("RectangleShape2D_prompt_wide")
+
+[node name="WavePrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(1280, 255)
+script = ExtResource("2_trigger")
+prompt_text = "巨浪会追上来，继续向终点前进。"
+auto_hide_seconds = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/WavePrompt"]
+shape = SubResource("RectangleShape2D_prompt_wide")
+
+[node name="FinishPrompt" type="Area2D" parent="TutorialTriggers"]
+position = Vector2(1880, 355)
+script = ExtResource("2_trigger")
+prompt_text = "到达终点。"
+auto_hide_seconds = 2.4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialTriggers/FinishPrompt"]
+shape = SubResource("RectangleShape2D_prompt_wide")
