@@ -1,16 +1,10 @@
 extends CanvasLayer
 
-@onready var start_button: Button = %StartButton
-
 
 @export_enum("res://scenes/game/Game.tscn","res://debug/FinishAreaRegression.tscn") var level_scene: String = "res://scenes/game/Game.tscn"
 
 
-func _ready() -> void:
-	start_button.pressed.connect(_start_game)
-
-
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		_start_game()
 	elif event is InputEventMouseButton and event.pressed:

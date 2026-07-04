@@ -1,9 +1,19 @@
 [gd_scene format=3 uid="uid://chya0leno7ddn"]
 
 [ext_resource type="Script" uid="uid://cvt0hbp00c7sw" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
+[ext_resource type="Texture2D" uid="uid://ca8tibv5ifslt" path="res://assets/art/UI/pause_menu/continue_game.png" id="2_7ida2"]
+[ext_resource type="Texture2D" uid="uid://2cmxxqg8uda6" path="res://assets/art/UI/pause_menu/pause_button.png" id="2_cctyv"]
+[ext_resource type="Texture2D" uid="uid://dgshdpvcap2qv" path="res://assets/art/UI/pause_menu/score.png" id="2_rw35d"]
+[ext_resource type="Texture2D" uid="uid://daphmmtsswb3d" path="res://assets/art/UI/pause_menu/paused.png" id="2_v5pi0"]
+[ext_resource type="Texture2D" uid="uid://d4bbk5eohk34q" path="res://assets/art/UI/pause_menu/restart.png" id="3_5twic"]
+[ext_resource type="Texture2D" uid="uid://cpss7co81jd1b" path="res://assets/art/UI/game_hud/coin.png" id="3_px486"]
+[ext_resource type="Texture2D" uid="uid://ckdygmo28wm2o" path="res://assets/art/UI/pause_menu/rescue_count_logo.png" id="4_px486"]
+[ext_resource type="Texture2D" uid="uid://c6qba4d3xp4o7" path="res://assets/art/UI/pause_menu/return_to_main_menu.png" id="4_v5pi0"]
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=1242282370]
 script = ExtResource("1_pause")
+metadata/_edit_vertical_guides_ = [32.0, 1152.0, 1120.0]
+metadata/_edit_horizontal_guides_ = [32.0]
 
 [node name="Dim" type="ColorRect" parent="." unique_id=1740688510]
 anchors_preset = 15
@@ -33,18 +43,22 @@ theme_override_constants/separation = 16
 
 [node name="ScoreGroup" type="VBoxContainer" parent="Root/TopLeftMargin/DataColumn" unique_id=2000000003]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = -19
 
-[node name="ScoreLabelText" type="Label" parent="Root/TopLeftMargin/DataColumn/ScoreGroup" unique_id=2000000004]
+[node name="ScoreLabelText" type="TextureRect" parent="Root/TopLeftMargin/DataColumn/ScoreGroup" unique_id=1700888103]
+custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "SCORE"
+size_flags_horizontal = 0
+size_flags_vertical = 3
+texture = ExtResource("2_rw35d")
+expand_mode = 5
 
 [node name="ScoreLabel" type="Label" parent="Root/TopLeftMargin/DataColumn/ScoreGroup" unique_id=2000000005]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 64
-text = "0"
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 72
+text = "36888"
 
 [node name="CoinRow" type="HBoxContainer" parent="Root/TopLeftMargin/DataColumn" unique_id=2000000006]
 layout_mode = 2
@@ -56,53 +70,51 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "0"
 
-[node name="CoinIcon" type="ColorRect" parent="Root/TopLeftMargin/DataColumn/CoinRow" unique_id=2000000008]
+[node name="CoinIcon" type="TextureRect" parent="Root/TopLeftMargin/DataColumn/CoinRow" unique_id=317012310]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-color = Color(0.8, 0.7, 0.2, 1)
+texture = ExtResource("3_px486")
+expand_mode = 2
 
-[node name="RescuedRow" type="HBoxContainer" parent="Root/TopLeftMargin/DataColumn" unique_id=2000000009]
+[node name="TextureRect" type="TextureRect" parent="Root/TopLeftMargin/DataColumn" unique_id=1360654457]
+custom_maximum_size = Vector2(200, -1)
 layout_mode = 2
-theme_override_constants/separation = 8
+texture = ExtResource("4_px486")
+expand_mode = 5
 
-[node name="PersonIcon" type="ColorRect" parent="Root/TopLeftMargin/DataColumn/RescuedRow" unique_id=2000000010]
-custom_minimum_size = Vector2(40, 48)
-layout_mode = 2
-color = Color(0.7, 0.7, 0.7, 1)
-
-[node name="RescuedInfo" type="VBoxContainer" parent="Root/TopLeftMargin/DataColumn/RescuedRow" unique_id=2000000011]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="RescuedLabel" type="Label" parent="Root/TopLeftMargin/DataColumn/RescuedRow/RescuedInfo" unique_id=2000000012]
+[node name="RescuedLabel" type="Label" parent="Root/TopLeftMargin/DataColumn/TextureRect" unique_id=2000000012]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.51900005
+anchor_top = 0.66300005
+anchor_right = 0.51900005
+anchor_bottom = 0.66300005
+offset_left = -0.8000183
+offset_top = -48.41001
+offset_right = 126.19999
+offset_bottom = -3.4100113
 theme_override_font_sizes/font_size = 32
 text = "0/0"
-
-[node name="SavedIcon" type="ColorRect" parent="Root/TopLeftMargin/DataColumn/RescuedRow/RescuedInfo" unique_id=2000000013]
-custom_minimum_size = Vector2(64, 24)
-layout_mode = 2
-color = Color(0.7, 0.7, 0.7, 1)
 
 [node name="TopRightMargin" type="MarginContainer" parent="Root" unique_id=2000000014]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -88.0
+offset_left = -80.0
 offset_top = 32.0
 offset_right = -32.0
-offset_bottom = 88.0
+offset_bottom = 80.0
 grow_horizontal = 0
 
 [node name="ResumeButton" type="Button" parent="Root/TopRightMargin" unique_id=2000000015]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(56, 56)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 flat = true
 
-[node name="ResumeIcon" type="ColorRect" parent="Root/TopRightMargin/ResumeButton" unique_id=2000000016]
+[node name="ResumeIcon" type="TextureRect" parent="Root/TopRightMargin/ResumeButton" unique_id=1679598884]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -110,26 +122,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+texture = ExtResource("2_cctyv")
+expand_mode = 3
 
-[node name="CenterTitle" type="CenterContainer" parent="Root" unique_id=2000000017]
+[node name="TitleLabel" type="TextureRect" parent="Root" unique_id=1473369020]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -145.0
-offset_top = -96.0
-offset_right = 155.0
-offset_bottom = 4.0
+offset_left = -108.0
+offset_top = -83.0
+offset_right = 106.60828
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="TitleLabel" type="Label" parent="Root/CenterTitle" unique_id=994521214]
-layout_mode = 2
-theme_override_font_sizes/font_size = 72
-text = "暂停"
-horizontal_alignment = 1
+texture = ExtResource("2_v5pi0")
+expand_mode = 1
 
 [node name="BottomBar" type="HBoxContainer" parent="Root" unique_id=2000000018]
 layout_mode = 1
@@ -139,7 +149,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -538.0
-offset_top = -140.0
+offset_top = -170.0
 offset_right = 539.0
 offset_bottom = -32.0
 grow_horizontal = 2
@@ -150,6 +160,7 @@ theme_override_constants/separation = 60
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+size_flags_stretch_ratio = 1.5
 theme_override_constants/separation = 16
 
 [node name="SoundRow" type="HBoxContainer" parent="Root/BottomBar/VolumePanel" unique_id=-1294967289]
@@ -166,6 +177,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.01
 value = 1.0
@@ -184,13 +196,15 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 max_value = 1.0
 step = 0.01
 value = 1.0
 
 [node name="ButtonsPanel" type="HBoxContainer" parent="Root/BottomBar" unique_id=-1294967282]
 layout_mode = 2
-theme_override_constants/separation = 32
+size_flags_horizontal = 3
+theme_override_constants/separation = 48
 
 [node name="ContinueButton" type="Button" parent="Root/BottomBar/ButtonsPanel" unique_id=-1294967281]
 unique_name_in_owner = true
@@ -198,24 +212,15 @@ custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 flat = true
 
-[node name="VBox" type="VBoxContainer" parent="Root/BottomBar/ButtonsPanel/ContinueButton" unique_id=-1294967280]
+[node name="TextureRect" type="TextureRect" parent="Root/BottomBar/ButtonsPanel/ContinueButton" unique_id=1556414703]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="ContinueIcon" type="ColorRect" parent="Root/BottomBar/ButtonsPanel/ContinueButton/VBox" unique_id=-1294967279]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="ContinueLabel" type="Label" parent="Root/BottomBar/ButtonsPanel/ContinueButton/VBox" unique_id=-1294967278]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "继续游戏"
-horizontal_alignment = 1
+texture = ExtResource("2_7ida2")
+expand_mode = 3
 
 [node name="RestartButton" type="Button" parent="Root/BottomBar/ButtonsPanel" unique_id=-1294967277]
 unique_name_in_owner = true
@@ -223,24 +228,15 @@ custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 flat = true
 
-[node name="VBox" type="VBoxContainer" parent="Root/BottomBar/ButtonsPanel/RestartButton" unique_id=-1294967276]
+[node name="TextureRect" type="TextureRect" parent="Root/BottomBar/ButtonsPanel/RestartButton" unique_id=96614454]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="RestartIcon" type="ColorRect" parent="Root/BottomBar/ButtonsPanel/RestartButton/VBox" unique_id=-1294967275]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="RestartLabel" type="Label" parent="Root/BottomBar/ButtonsPanel/RestartButton/VBox" unique_id=-1294967274]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "重新开始"
-horizontal_alignment = 1
+texture = ExtResource("3_5twic")
+expand_mode = 3
 
 [node name="MainMenuButton" type="Button" parent="Root/BottomBar/ButtonsPanel" unique_id=-1294967273]
 unique_name_in_owner = true
@@ -248,21 +244,12 @@ custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 flat = true
 
-[node name="VBox" type="VBoxContainer" parent="Root/BottomBar/ButtonsPanel/MainMenuButton" unique_id=-1294967272]
+[node name="TextureRect" type="TextureRect" parent="Root/BottomBar/ButtonsPanel/MainMenuButton" unique_id=1203699923]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="MainMenuIcon" type="ColorRect" parent="Root/BottomBar/ButtonsPanel/MainMenuButton/VBox" unique_id=-1294967271]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="MainMenuLabel" type="Label" parent="Root/BottomBar/ButtonsPanel/MainMenuButton/VBox" unique_id=-1294967270]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "回到主界面"
-horizontal_alignment = 1
+texture = ExtResource("4_v5pi0")
+expand_mode = 3
