@@ -260,6 +260,28 @@ class ProjectStructureTest(unittest.TestCase):
         for scene_path, script_path in expected_references.items():
             self.assertIn(script_path, self.read(scene_path))
 
+    def test_can_collectible_adds_collected_value_to_game_state(self):
+        script = self.read("scripts/items/can_collectible.gd")
+        collect_branch = script[script.index('if body.is_in_group("boats"):'):]
+
+        self.assertIn("GameState.add_coin(value)", collect_branch)
+        self.assertIn("collected.emit(value)", collect_branch)
+        self.assertIn("queue_free()", collect_branch)
+
+    def test_can_collectible_uses_coin_animation_frames(self):
+        scene = self.read("scenes/items/CanCollectible.tscn")
+
+        self.assertIn('[node name="Visual" type="AnimatedSprite2D" parent="."]', scene)
+        self.assertIn('[sub_resource type="SpriteFrames"', scene)
+        self.assertIn('autoplay = "default"', scene)
+        self.assertNotIn('[node name="Visual" type="Polygon2D" parent="."]', scene)
+
+        for frame_index in range(1, 23):
+            self.assertIn(
+                f"res://assets/art/Character Prop Assets/coin/{frame_index:04}.png",
+                scene,
+            )
+
     def test_character_prop_art_is_bound_to_gameplay_scenes(self):
         anchor_scene = self.read("scenes/mechanics/Anchor.tscn")
         boat_scene = self.read("scenes/player/Boat.tscn")
@@ -966,8 +988,10 @@ class ProjectStructureTest(unittest.TestCase):
         for expected in [
             "@onready var rescued_label: Label = %RescuedLabel",
             "GameState.rescued_changed.connect(_on_rescued_changed)",
+            "_on_rescued_changed(GameState.rescued_count, GameState.rescued_target)",
             "func _on_rescued_changed(count: int, target: int) -> void:",
             "rescued_label.text = \"%d/%d\"",
+            "func update_rescued(count: int, target: int) -> void:",
         ]:
             self.assertIn(expected, hud_script)
 
