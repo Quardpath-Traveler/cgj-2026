@@ -12,5 +12,6 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("boats"):
+		GameState.award_coin_pickup(value)
 		collected.emit(value)
 		queue_free()
