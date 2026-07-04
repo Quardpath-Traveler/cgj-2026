@@ -1,23 +1,159 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://c0hl712jsx7pn"]
 
-[ext_resource type="Script" path="res://debug/tutorial_level_playtest.gd" id="1_playtest"]
-[ext_resource type="PackedScene" path="res://scenes/levels/TutorialLevel.tscn" id="2_level"]
-[ext_resource type="PackedScene" path="res://scenes/player/Boat.tscn" id="3_boat"]
-[ext_resource type="PackedScene" path="res://scenes/camera/GameCamera.tscn" id="4_camera"]
+[ext_resource type="Script" uid="uid://cplaytutorial" path="res://debug/tutorial_level_playtest.gd" id="1_playtest"]
+[ext_resource type="PackedScene" uid="uid://cexausr8ycq2i" path="res://scenes/levels/TutorialLevel.tscn" id="2_level"]
+[ext_resource type="PackedScene" uid="uid://cgdpl2y4glvwl" path="res://scenes/player/Boat.tscn" id="3_boat"]
+[ext_resource type="PackedScene" uid="uid://b1vag8n54dels" path="res://scenes/camera/GameCamera.tscn" id="4_camera"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+[ext_resource type="Texture2D" uid="uid://bc7w5dhl4757f" path="res://assets/art/Scene Assets/sky.png" id="7_o76vf"]
+[ext_resource type="Texture2D" uid="uid://cx6rdyh1qy5xs" path="res://assets/art/Scene Assets/mountain/mountain3.png" id="8_245a7"]
+[ext_resource type="Texture2D" uid="uid://c8yq6b7u70to" path="res://assets/art/Scene Assets/mountain/mountain1.png" id="8_a7j4m"]
+[ext_resource type="Texture2D" uid="uid://bjb06b5emi0dx" path="res://assets/art/Scene Assets/mountain/mountain4.png" id="9_cijap"]
+[ext_resource type="Texture2D" uid="uid://btpg8gr0capux" path="res://assets/art/Scene Assets/mountain/mountain2.png" id="9_uvx3l"]
+[ext_resource type="Texture2D" uid="uid://bi5xp8mkoorfu" path="res://assets/art/Scene Assets/mountain/fill gaps.png" id="10_lpd8t"]
+[ext_resource type="Texture2D" uid="uid://8m6bvmji25dc" path="res://assets/art/Scene Assets/cloud/cloud4.png" id="10_nuvnh"]
+[ext_resource type="Texture2D" uid="uid://dis2t2a8omjtm" path="res://assets/art/Scene Assets/cloud/cloud2.png" id="11_qod33"]
+[ext_resource type="Texture2D" uid="uid://bkoqshsjfemj0" path="res://assets/art/Scene Assets/cloud/cloud1.png" id="12_245a7"]
+[ext_resource type="Texture2D" uid="uid://hmlsgcmc8sjd" path="res://assets/art/Scene Assets/cloud/cloud5.png" id="13_qod33"]
+[ext_resource type="Texture2D" uid="uid://r2heekhlan7s" path="res://assets/art/Scene Assets/mountain/fill gaps2.png" id="13_r2nlr"]
+[ext_resource type="Texture2D" uid="uid://ce0nilw87m67j" path="res://assets/art/Scene Assets/mountain/born.png" id="16_csaak"]
 
-[node name="TutorialLevelPlaytest" type="Node2D"]
+[node name="TutorialLevelPlaytest" type="Node2D" unique_id=1833807068]
 script = ExtResource("1_playtest")
 
-[node name="World" type="Node2D" parent="."]
+[node name="World" type="Node2D" parent="." unique_id=1046066720]
 
-[node name="TutorialLevel" parent="World" instance=ExtResource("2_level")]
+[node name="TutorialLevel" parent="World" unique_id=1816602886 instance=ExtResource("2_level")]
 
-[node name="Player" parent="." instance=ExtResource("3_boat")]
+[node name="Player" parent="." unique_id=1674477432 instance=ExtResource("3_boat")]
 
-[node name="GameCamera" parent="Player" instance=ExtResource("4_camera")]
+[node name="GameCamera" parent="Player" unique_id=781563158 instance=ExtResource("4_camera")]
 
-[node name="HUD" parent="." instance=ExtResource("5_hud")]
+[node name="HUD" parent="." unique_id=41619134 instance=ExtResource("5_hud")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+[node name="PauseMenu" parent="." unique_id=1998646878 instance=ExtResource("6_pause")]
+
+[node name="Sky" type="Sprite2D" parent="." unique_id=135879394]
+show_behind_parent = true
+position = Vector2(1147, -135)
+rotation = 0.0012651181
+scale = Vector2(1.4472903, 1.413475)
+texture = ExtResource("7_o76vf")
+
+[node name="Mountain5" type="Sprite2D" parent="." unique_id=550063308]
+show_behind_parent = true
+position = Vector2(375.69434, 106.024445)
+rotation = 0.22057043
+scale = Vector2(0.58498687, 0.6235519)
+skew = 0.0102574825
+texture = ExtResource("8_245a7")
+
+[node name="Mountain6" type="Sprite2D" parent="Mountain5" unique_id=1381506663]
+show_behind_parent = true
+position = Vector2(1296.8466, 52.63069)
+rotation = 0.02171105
+scale = Vector2(1.3337883, 0.73013884)
+skew = 0.004028797
+texture = ExtResource("9_cijap")
+
+[node name="Mountain1" type="Sprite2D" parent="." unique_id=1643932369]
+show_behind_parent = true
+position = Vector2(-39.36966, 53.146233)
+rotation = 0.22535998
+scale = Vector2(0.5192233, 0.40910587)
+texture = ExtResource("8_a7j4m")
+
+[node name="Mountain3" type="Sprite2D" parent="." unique_id=629827061]
+show_behind_parent = true
+position = Vector2(759.1619, 139.4498)
+rotation = 0.24487086
+scale = Vector2(0.5703404, 1.2148749)
+texture = ExtResource("9_uvx3l")
+
+[node name="FillGaps" type="Sprite2D" parent="Mountain3" unique_id=987700627]
+show_behind_parent = true
+position = Vector2(79.41333, 288.95316)
+rotation = 0.011394596
+scale = Vector2(0.85224336, 0.5414064)
+skew = 0.040261865
+texture = ExtResource("10_lpd8t")
+
+[node name="FillGaps2" type="Sprite2D" parent="." unique_id=1161930216]
+show_behind_parent = true
+position = Vector2(1575.8416, 546.98883)
+rotation = 0.07024907
+scale = Vector2(0.60272515, 0.5865994)
+texture = ExtResource("13_r2nlr")
+
+[node name="Mountain4" type="Sprite2D" parent="FillGaps2" unique_id=645979926]
+position = Vector2(-53.534424, -445.5657)
+rotation = -0.027231358
+scale = Vector2(1.0500249, 1.897762)
+skew = 0.001437068
+texture = ExtResource("9_uvx3l")
+
+[node name="Cloud4" type="Sprite2D" parent="." unique_id=1110380068]
+position = Vector2(94.83768, -109.23233)
+rotation = 0.42177102
+scale = Vector2(0.5212769, 0.5324004)
+texture = ExtResource("10_nuvnh")
+
+[node name="Cloud1" type="Sprite2D" parent="Cloud4" unique_id=778444420]
+position = Vector2(655.4195, -295.6978)
+rotation = -0.24932583
+scale = Vector2(0.9983449, 1.0198972)
+skew = -0.010286808
+texture = ExtResource("12_245a7")
+
+[node name="Cloud5" type="Sprite2D" parent="Cloud4" unique_id=310809087]
+position = Vector2(1627.1222, -689.6507)
+rotation = -0.17658599
+scale = Vector2(1.6631638, 1.5818046)
+skew = -0.0074493885
+texture = ExtResource("10_nuvnh")
+
+[node name="Cloud6" type="Sprite2D" parent="Cloud4" unique_id=580059573]
+position = Vector2(1043.4337, -293.23102)
+rotation = -0.14889663
+scale = Vector2(1.3840529, 1.1767558)
+skew = -0.006321907
+texture = ExtResource("13_qod33")
+
+[node name="Cloud7" type="Sprite2D" parent="Cloud4" unique_id=1670614540]
+position = Vector2(-598.09125, -81.455505)
+rotation = -0.13360508
+scale = Vector2(1.4538541, 1.3581716)
+skew = -0.005690098
+texture = ExtResource("10_nuvnh")
+
+[node name="Cloud8" type="Sprite2D" parent="Cloud4" unique_id=1168342031]
+position = Vector2(-385.14618, -38.24646)
+rotation = -0.17366457
+scale = Vector2(1.2599287, 1.3400551)
+skew = -0.0073314905
+texture = ExtResource("13_qod33")
+
+[node name="Cloud3" type="Sprite2D" parent="Cloud4" unique_id=1546341553]
+position = Vector2(1352.5848, -875.78595)
+rotation = -0.4139401
+scale = Vector2(1.9117076, 1.8850619)
+skew = -0.015772581
+texture = ExtResource("12_245a7")
+
+[node name="Cloud9" type="Sprite2D" parent="Cloud4" unique_id=375833799]
+position = Vector2(62.794106, -464.91528)
+rotation = -0.23492171
+scale = Vector2(1.2630699, 1.1455039)
+skew = -0.009741306
+texture = ExtResource("11_qod33")
+
+[node name="Born" type="Sprite2D" parent="." unique_id=1245777604]
+position = Vector2(658, 165)
+scale = Vector2(0.49143854, 0.49143854)
+texture = ExtResource("16_csaak")
+
+[node name="Born2" type="Sprite2D" parent="." unique_id=1278048120]
+position = Vector2(1568, 388.99997)
+scale = Vector2(0.6025652, 0.54708916)
+texture = ExtResource("16_csaak")
