@@ -193,6 +193,29 @@ class ProjectStructureTest(unittest.TestCase):
         ]:
             self.assertIn(expected, rescue_script)
 
+    def test_boat_tracks_and_awards_safe_landed_360_trick(self):
+        boat_script = self.read("scripts/player/boat.gd")
+        water_script = self.read("scripts/level_parts/water_surface.gd")
+
+        for expected in [
+            "const TRICK_FULL_ROTATION_RADIANS: float = TAU",
+            "const TRICK_360_NAME: String = \"360\"",
+            "var _airborne_rotation_total: float = 0.0",
+            "var _last_trick_rotation: float = 0.0",
+            "var _pending_360_tricks: int = 0",
+            "_update_airborne_trick_tracking()",
+            "func on_safe_landing(landing_angle_degrees: float, water_surface: Node2D) -> void:",
+            "GameState.award_trick(TRICK_360_NAME, GameState.TRICK_360_SCORE_VALUE)",
+            "func _reset_trick_tracking() -> void:",
+        ]:
+            self.assertIn(expected, boat_script)
+
+        for expected in [
+            "if body.has_method(\"on_safe_landing\"):",
+            "body.on_safe_landing(landing_angle, self)",
+        ]:
+            self.assertIn(expected, water_script)
+
     def test_scene_script_references_are_present(self):
         expected_references = {
             "scenes/main/Main.tscn": "res://scripts/main/main.gd",

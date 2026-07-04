@@ -2,6 +2,8 @@ class_name Boat
 extends RigidBody2D
 
 const CREW_MEMBER_SCENE := preload("res://scenes/characters/BoatCrewNPC.tscn")
+const TRICK_FULL_ROTATION_RADIANS: float = TAU
+const TRICK_360_NAME: String = "360"
 
 signal crew_count_changed(count: int)
 signal crew_lost(count: int)
@@ -53,6 +55,10 @@ var _manual_bullet_time_target_scale: float = 1.0
 var _manual_bullet_time_start_scale: float = 1.0
 var _manual_bullet_time_transition_elapsed: float = 0.0
 var _is_counter_rotation_boost_active: bool = false
+var _airborne_rotation_total: float = 0.0
+var _last_trick_rotation: float = 0.0
+var _pending_360_tricks: int = 0
+var _was_tracking_airborne_trick: bool = false
 
 enum RespawnState { NONE, RECALL, LAUNCH, RECOVER }
 
@@ -83,6 +89,7 @@ func _physics_process(delta: float) -> void:
 	_update_manual_bullet_time(delta)
 	_update_respawn_recovery_timer(delta)
 	_update_respawn_state(delta)
+	_update_airborne_trick_tracking()
 
 	if _respawn_state != RespawnState.NONE:
 		_update_posture_log(delta)
@@ -236,6 +243,32 @@ func _update_anchor_aim_target() -> void:
 		anchor.update_aim_target(get_global_mouse_position())
 
 
+func _update_airborne_trick_tracking() -> void:
+	if is_airborne():
+		if not _was_tracking_airborne_trick:
+			_was_tracking_airborne_trick = true
+			_last_trick_rotation = global_rotation
+			return
+
+		var rotation_delta := absf(wrapf(global_rotation - _last_trick_rotation, -PI, PI))
+		_last_trick_rotation = global_rotation
+		_airborne_rotation_total += rotation_delta
+
+		while _airborne_rotation_total >= TRICK_FULL_ROTATION_RADIANS:
+			_pending_360_tricks += 1
+			_airborne_rotation_total -= TRICK_FULL_ROTATION_RADIANS
+	else:
+		if not is_in_water():
+			_reset_trick_tracking()
+
+
+func _reset_trick_tracking() -> void:
+	_airborne_rotation_total = 0.0
+	_last_trick_rotation = global_rotation
+	_pending_360_tricks = 0
+	_was_tracking_airborne_trick = false
+
+
 func is_respawning() -> bool:
 	return _respawn_state != RespawnState.NONE
 
@@ -245,6 +278,7 @@ func respawn_at(target_position: Vector2) -> void:
 		return
 	if _respawn_recovery_timer > 0.0:
 		return
+	_reset_trick_tracking()
 	_respawn_state = RespawnState.RECALL
 	_respawn_target = target_position
 
@@ -254,11 +288,18 @@ func on_bad_landing(angle_degrees: float, target_rotation: float, water_surface:
 		if Time.get_ticks_msec() / 1000.0 - _last_bad_landing_time < bad_landing_min_trigger_interval:
 			return
 
+	_reset_trick_tracking()
 	lose_crew(1)
 	_righting_timer = bad_landing_righting_duration
 	_righting_target_rotation = target_rotation
 	_last_bad_landing_water = water_surface
 	_last_bad_landing_time = Time.get_ticks_msec() / 1000.0
+
+
+func on_safe_landing(landing_angle_degrees: float, water_surface: Node2D) -> void:
+	for _index in range(_pending_360_tricks):
+		GameState.award_trick(TRICK_360_NAME, GameState.TRICK_360_SCORE_VALUE)
+	_reset_trick_tracking()
 
 
 func _limit_linear_speed(state: PhysicsDirectBodyState2D) -> void:
@@ -514,6 +555,7 @@ func _execute_respawn_launch(state: PhysicsDirectBodyState2D) -> void:
 	state.transform.origin = _respawn_target
 	state.linear_velocity = Vector2.ZERO
 	state.angular_velocity = 0.0
+	_reset_trick_tracking()
 	if crew_count > 0:
 		lose_crew(1)
 
