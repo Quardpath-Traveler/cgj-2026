@@ -4,16 +4,20 @@ extends CanvasLayer
 @onready var coin_label: Label = %CoinLabel
 @onready var rescued_label: Label = %RescuedLabel
 @onready var pause_button: TextureButton = %PauseButton
+@onready var pause_icon: CenterContainer = %PauseIcon
+@onready var resume_icon: CenterContainer = %ResumeIcon
 
 
 func _ready() -> void:
 	GameState.score_changed.connect(_on_score_changed)
 	GameState.coin_changed.connect(_on_coin_changed)
 	GameState.rescued_changed.connect(_on_rescued_changed)
+	GameState.pause_changed.connect(_on_pause_changed)
 	pause_button.pressed.connect(_on_pause_pressed)
 	_on_score_changed(GameState.score)
 	_on_coin_changed(GameState.coin)
 	_on_rescued_changed(GameState.rescued_count, GameState.rescued_target)
+	_on_pause_changed(GameState.is_paused)
 
 
 func _on_score_changed(score: int) -> void:
@@ -26,6 +30,12 @@ func _on_coin_changed(coin: int) -> void:
 
 func _on_rescued_changed(count: int, target: int) -> void:
 	rescued_label.text = "%d/%d" % [count, target]
+
+
+func _on_pause_changed(is_paused: bool) -> void:
+	pause_icon.visible = not is_paused
+	resume_icon.visible = is_paused
+	visible = not is_paused
 
 
 func _on_pause_pressed() -> void:

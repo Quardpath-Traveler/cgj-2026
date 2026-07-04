@@ -1,38 +1,268 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://chya0leno7ddn"]
 
-[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
+[ext_resource type="Script" uid="uid://cvt0hbp00c7sw" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
 
-[node name="PauseMenu" type="CanvasLayer"]
-visible = false
+[node name="PauseMenu" type="CanvasLayer" unique_id=1242282370]
 script = ExtResource("1_pause")
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="." unique_id=1740688510]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0, 0, 0, 0.55)
+color = Color(0, 0, 0, 0.24705882)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="Root" type="Control" parent="." unique_id=2000000000]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-offset_left = 272.0
-offset_top = 144.0
-offset_right = 368.0
-offset_bottom = 216.0
+[node name="TopLeftMargin" type="MarginContainer" parent="Root" unique_id=2000000001]
+layout_mode = 1
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 300.0
+offset_bottom = 280.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 88.0
-offset_bottom = 64.0
+[node name="DataColumn" type="VBoxContainer" parent="Root/TopLeftMargin" unique_id=2000000002]
+layout_mode = 2
+theme_override_constants/separation = 16
 
-[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer"]
-text = "Paused"
+[node name="ScoreGroup" type="VBoxContainer" parent="Root/TopLeftMargin/DataColumn" unique_id=2000000003]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ScoreLabelText" type="Label" parent="Root/TopLeftMargin/DataColumn/ScoreGroup" unique_id=2000000004]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "SCORE"
+
+[node name="ScoreLabel" type="Label" parent="Root/TopLeftMargin/DataColumn/ScoreGroup" unique_id=2000000005]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "0"
+
+[node name="CoinRow" type="HBoxContainer" parent="Root/TopLeftMargin/DataColumn" unique_id=2000000006]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CoinLabel" type="Label" parent="Root/TopLeftMargin/DataColumn/CoinRow" unique_id=2000000007]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "0"
+
+[node name="CoinIcon" type="ColorRect" parent="Root/TopLeftMargin/DataColumn/CoinRow" unique_id=2000000008]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+color = Color(0.8, 0.7, 0.2, 1)
+
+[node name="RescuedRow" type="HBoxContainer" parent="Root/TopLeftMargin/DataColumn" unique_id=2000000009]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PersonIcon" type="ColorRect" parent="Root/TopLeftMargin/DataColumn/RescuedRow" unique_id=2000000010]
+custom_minimum_size = Vector2(40, 48)
+layout_mode = 2
+color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="RescuedInfo" type="VBoxContainer" parent="Root/TopLeftMargin/DataColumn/RescuedRow" unique_id=2000000011]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="RescuedLabel" type="Label" parent="Root/TopLeftMargin/DataColumn/RescuedRow/RescuedInfo" unique_id=2000000012]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "0/0"
+
+[node name="SavedIcon" type="ColorRect" parent="Root/TopLeftMargin/DataColumn/RescuedRow/RescuedInfo" unique_id=2000000013]
+custom_minimum_size = Vector2(64, 24)
+layout_mode = 2
+color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="TopRightMargin" type="MarginContainer" parent="Root" unique_id=2000000014]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -88.0
+offset_top = 32.0
+offset_right = -32.0
+offset_bottom = 88.0
+grow_horizontal = 0
+
+[node name="ResumeButton" type="Button" parent="Root/TopRightMargin" unique_id=2000000015]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+flat = true
+
+[node name="ResumeIcon" type="ColorRect" parent="Root/TopRightMargin/ResumeButton" unique_id=2000000016]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CenterTitle" type="CenterContainer" parent="Root" unique_id=2000000017]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = -96.0
+offset_right = 155.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="Root/CenterTitle" unique_id=994521214]
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+text = "暂停"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="BottomBar" type="HBoxContainer" parent="Root" unique_id=2000000018]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -538.0
+offset_top = -140.0
+offset_right = 539.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 60
+
+[node name="VolumePanel" type="VBoxContainer" parent="Root/BottomBar" unique_id=-1294967290]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 16
+
+[node name="SoundRow" type="HBoxContainer" parent="Root/BottomBar/VolumePanel" unique_id=-1294967289]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SoundLabel" type="Label" parent="Root/BottomBar/VolumePanel/SoundRow" unique_id=-1294967288]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "声音"
+
+[node name="SoundSlider" type="HSlider" parent="Root/BottomBar/VolumePanel/SoundRow" unique_id=-1294967287]
 unique_name_in_owner = true
-text = "Resume"
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="MusicRow" type="HBoxContainer" parent="Root/BottomBar/VolumePanel" unique_id=-1294967286]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MusicLabel" type="Label" parent="Root/BottomBar/VolumePanel/MusicRow" unique_id=-1294967285]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "音乐"
+
+[node name="MusicSlider" type="HSlider" parent="Root/BottomBar/VolumePanel/MusicRow" unique_id=-1294967284]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="ButtonsPanel" type="HBoxContainer" parent="Root/BottomBar" unique_id=-1294967282]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="ContinueButton" type="Button" parent="Root/BottomBar/ButtonsPanel" unique_id=-1294967281]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="Root/BottomBar/ButtonsPanel/ContinueButton" unique_id=-1294967280]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ContinueIcon" type="ColorRect" parent="Root/BottomBar/ButtonsPanel/ContinueButton/VBox" unique_id=-1294967279]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ContinueLabel" type="Label" parent="Root/BottomBar/ButtonsPanel/ContinueButton/VBox" unique_id=-1294967278]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "继续游戏"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="Root/BottomBar/ButtonsPanel" unique_id=-1294967277]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="Root/BottomBar/ButtonsPanel/RestartButton" unique_id=-1294967276]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RestartIcon" type="ColorRect" parent="Root/BottomBar/ButtonsPanel/RestartButton/VBox" unique_id=-1294967275]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RestartLabel" type="Label" parent="Root/BottomBar/ButtonsPanel/RestartButton/VBox" unique_id=-1294967274]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "重新开始"
+horizontal_alignment = 1
+
+[node name="MainMenuButton" type="Button" parent="Root/BottomBar/ButtonsPanel" unique_id=-1294967273]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="Root/BottomBar/ButtonsPanel/MainMenuButton" unique_id=-1294967272]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMenuIcon" type="ColorRect" parent="Root/BottomBar/ButtonsPanel/MainMenuButton/VBox" unique_id=-1294967271]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MainMenuLabel" type="Label" parent="Root/BottomBar/ButtonsPanel/MainMenuButton/VBox" unique_id=-1294967270]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "回到主界面"
+horizontal_alignment = 1

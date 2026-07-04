@@ -16,6 +16,7 @@ offset_right = -16.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TopLeftMargin" type="MarginContainer" parent="HUDRoot" unique_id=1231248011]
 layout_mode = 1
@@ -51,7 +52,8 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="HUDRoot/TopRightMargin/PauseButton" unique_id=1234567002]
+[node name="PauseIcon" type="CenterContainer" parent="HUDRoot/TopRightMargin/PauseButton" unique_id=1234567002]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -59,17 +61,38 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Bars" type="HBoxContainer" parent="HUDRoot/TopRightMargin/PauseButton/CenterContainer" unique_id=1234567003]
+[node name="Bars" type="HBoxContainer" parent="HUDRoot/TopRightMargin/PauseButton/PauseIcon" unique_id=1234567003]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Bar1" type="ColorRect" parent="HUDRoot/TopRightMargin/PauseButton/CenterContainer/Bars" unique_id=1234567004]
+[node name="Bar1" type="ColorRect" parent="HUDRoot/TopRightMargin/PauseButton/PauseIcon/Bars" unique_id=1234567004]
 custom_minimum_size = Vector2(8, 32)
 layout_mode = 2
+color = Color(1, 1, 1, 1)
+mouse_filter = 2
 
-[node name="Bar2" type="ColorRect" parent="HUDRoot/TopRightMargin/PauseButton/CenterContainer/Bars" unique_id=1234567005]
+[node name="Bar2" type="ColorRect" parent="HUDRoot/TopRightMargin/PauseButton/PauseIcon/Bars" unique_id=1234567005]
 custom_minimum_size = Vector2(8, 32)
 layout_mode = 2
+color = Color(1, 1, 1, 1)
+mouse_filter = 2
+
+[node name="ResumeIcon" type="CenterContainer" parent="HUDRoot/TopRightMargin/PauseButton" unique_id=1234567006]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResumeIconLabel" type="Label" parent="HUDRoot/TopRightMargin/PauseButton/ResumeIcon" unique_id=1234567007]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "▶"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BottomLeftMargin" type="MarginContainer" parent="HUDRoot" unique_id=1231248013]
 layout_mode = 1
