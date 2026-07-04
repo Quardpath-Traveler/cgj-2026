@@ -23,6 +23,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 	_rescued = true
 	body.gain_crew(rescue_value)
+	GameState.award_rescue(rescue_value)
 	var rescued_npc := get_parent()
 	if rescued_npc != null:
 		rescued_npc.queue_free()

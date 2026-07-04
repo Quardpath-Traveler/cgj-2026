@@ -176,6 +176,23 @@ class ProjectStructureTest(unittest.TestCase):
         ]:
             self.assertIn(expected, script)
 
+    def test_pickups_and_rescues_award_score_rewards(self):
+        can_script = self.read("scripts/items/can_collectible.gd")
+        rescue_script = self.read("scripts/characters/npc_rescue.gd")
+
+        for expected in [
+            "GameState.award_coin_pickup(value)",
+            "queue_free()",
+        ]:
+            self.assertIn(expected, can_script)
+
+        for expected in [
+            "body.gain_crew(rescue_value)",
+            "GameState.award_rescue(rescue_value)",
+            "_rescued = true",
+        ]:
+            self.assertIn(expected, rescue_script)
+
     def test_scene_script_references_are_present(self):
         expected_references = {
             "scenes/main/Main.tscn": "res://scripts/main/main.gd",
