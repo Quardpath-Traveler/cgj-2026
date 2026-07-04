@@ -35,14 +35,24 @@ func _process(_delta: float) -> void:
 	var input := Input.get_axis("move_left", "move_right")
 	var applied_torque := _compute_applied_torque(input)
 
-	_value_panel.update(_boat, input, applied_torque, position_locked)
+	_value_panel.update(
+		_boat,
+		input,
+		applied_torque,
+		position_locked,
+		_boat._is_counter_rotation_boost_active,
+		_boat.counter_rotation_boost
+	)
 	_graph.push_sample(_boat.angular_velocity)
 	_indicator.global_position = _boat.global_position
 	_indicator.update(_boat, input)
 
 func _compute_applied_torque(input: float) -> float:
 	if _boat.is_airborne() and not is_zero_approx(input):
-		return input * _boat.airborne_rotation_torque
+		var torque := _boat.airborne_rotation_torque
+		if _boat._is_counter_rotation_boost_active:
+			torque *= _boat.counter_rotation_boost
+		return input * torque
 	return 0.0
 
 func _unhandled_input(event: InputEvent) -> void:
