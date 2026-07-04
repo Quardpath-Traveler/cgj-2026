@@ -39,7 +39,6 @@ var _initial_torque: float
 var _expected_torque: float
 var _max_angular_velocity_initial: float = 0.0
 var _max_angular_velocity_boosted: float = 0.0
-var _previous_angular_velocity: float = 0.0
 var _failures: Array[String] = []
 var _exit_code: int = 0
 
@@ -167,9 +166,10 @@ func _physics_process(delta: float) -> void:
 		Phase.ASSERT_BOOST_TRIGGERED:
 			if not _boat._is_counter_rotation_boost_active:
 				_fail("Counter-rotation boost did not activate when reversing input")
-			var expected_boosted_torque := _boat.airborne_rotation_torque * _boat.counter_rotation_boost
-			var actual_applied_torque := absf(_boat.angular_velocity - _previous_angular_velocity) / delta
-			# Simpler assertion: check the boat is decelerating faster than base torque would allow
+			# The boosted torque magnitude cannot be asserted reliably from the
+			# angular-velocity delta because the effective rotational inertia is not
+			# exposed in a way that matches the observed acceleration. The
+			# velocity-reversal check below is the meaningful observable assertion.
 			if _boat.angular_velocity > 0.0:
 				if _phase_timer < assert_boost_triggered_timeout_seconds:
 					return
@@ -181,8 +181,6 @@ func _physics_process(delta: float) -> void:
 
 		Phase.DONE:
 			pass
-
-	_previous_angular_velocity = _boat.angular_velocity
 
 
 func _find_boat() -> Boat:
