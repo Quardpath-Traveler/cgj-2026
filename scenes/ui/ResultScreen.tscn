@@ -14,7 +14,7 @@
 
 [node name="ResultScreen" type="CanvasLayer" unique_id=1630884730]
 script = ExtResource("1_result")
-metadata/_edit_vertical_guides_ = [906.0]
+metadata/_edit_vertical_guides_ = [906.0, 270.0]
 
 [node name="Background" type="ColorRect" parent="." unique_id=1903587224]
 anchors_preset = 15
@@ -111,6 +111,7 @@ layout_mode = 2
 size_flags_vertical = 2
 size_flags_stretch_ratio = 3.56
 offset_transform_enabled = true
+offset_transform_position = Vector2(-3.72, 0)
 theme_override_fonts/font = ExtResource("6_rikjr")
 theme_override_font_sizes/font_size = 128
 text = "36888"
