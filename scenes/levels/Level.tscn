@@ -436,9 +436,6 @@ position = Vector2(2603, 789)
 [node name="HookPointB3" parent="." unique_id=550695079 instance=ExtResource("3_iv3rn")]
 position = Vector2(2939, 1697)
 
-[node name="HookPointB4" parent="." unique_id=382217012 instance=ExtResource("3_iv3rn")]
-position = Vector2(3190, 1707)
-
 [node name="HookPointB5" parent="." unique_id=1578432561 instance=ExtResource("3_iv3rn")]
 position = Vector2(3431, 1717)
 
