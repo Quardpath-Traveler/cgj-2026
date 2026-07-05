@@ -42,3 +42,8 @@ func on_level_completed() -> void:
 ## 重试：回退到刚通关的关卡
 func retry_last_played() -> void:
 	current_level_index = last_played_index
+
+
+## 判断刚通关的关卡之后是否还有下一关
+func has_next_level() -> bool:
+	return last_played_index < level_scenes.size() - 1
