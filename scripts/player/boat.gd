@@ -2,6 +2,7 @@ class_name Boat
 extends RigidBody2D
 
 const CREW_MEMBER_SCENE := preload("res://scenes/characters/BoatCrewNPC.tscn")
+const CrewDropEffect := preload("res://scripts/effects/crew_drop_effect.gd")
 const TRICK_FULL_ROTATION_RADIANS: float = TAU
 const TRICK_360_NAME: String = "360"
 
@@ -209,6 +210,14 @@ func lose_crew(amount: int = 1) -> void:
 	if crew_count < previous_count:
 		crew_lost.emit(crew_count)
 		GameState.set_rescued_count(crew_count)
+		_spawn_crew_drop_effect()
+
+
+func _spawn_crew_drop_effect() -> void:
+	var effect := CrewDropEffect.new()
+	add_child(effect)
+	effect.global_position = global_position
+	AudioManager.play_scream()
 
 
 func gain_crew(amount: int = 1) -> void:
@@ -566,9 +575,10 @@ func _recall_anchor_for_respawn() -> void:
 
 
 func _execute_respawn_launch(state: PhysicsDirectBodyState2D) -> void:
-	state.transform.origin = _respawn_target
+	state.transform = Transform2D(0.0, _respawn_target)
 	state.linear_velocity = Vector2.ZERO
 	state.angular_velocity = 0.0
+	_righting_timer = 0.0
 	_reset_trick_tracking()
 	if crew_count > 0:
 		lose_crew(1)
