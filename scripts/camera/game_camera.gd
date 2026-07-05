@@ -15,6 +15,18 @@ var _velocity_lead_offset: Vector2 = Vector2.ZERO
 func _ready() -> void:
 	top_level = true
 	zoom = zoom_level
+	# 过场期间 SceneTree.paused=true，仍需 _process 跟随玩家，避免 wipe 退出后摄像头跳变
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
+## 立即把摄像头对准玩家并清零速度前瞻偏移。
+## 在玩家位置确定后、过场 wipe 退出前调用，确保滑出时画面已稳定在玩家视角。
+func snap_to_target() -> void:
+	_player = get_tree().get_first_node_in_group("boats")
+	if not is_instance_valid(_player):
+		return
+	_velocity_lead_offset = Vector2.ZERO
+	global_position = _player.global_position + camera_offset
 
 
 func _process(delta: float) -> void:

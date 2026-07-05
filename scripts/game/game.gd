@@ -25,6 +25,10 @@ func _instantiate_level() -> void:
 		current_level.setup(player)
 	if current_level.has_method("get_start_position"):
 		player.global_position = current_level.get_start_position()
+		# 玩家位置确定后立即把摄像头 snap 到位，避免过场 wipe 退出后画面跳变
+		var camera := player.get_node_or_null("GameCamera")
+		if camera is GameCamera:
+			camera.snap_to_target()
 	if current_level.has_signal("level_completed"):
 		current_level.level_completed.connect(_on_level_completed)
 
