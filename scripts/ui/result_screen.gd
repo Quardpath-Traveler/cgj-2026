@@ -75,6 +75,7 @@ func _update_result_images(count: int, target: int) -> void:
 
 
 func _on_retry_button_pressed() -> void:
+	LevelManager.retry_last_played()
 	EventBus.scene_transition_requested.emit("res://scenes/game/Game.tscn")
 
 

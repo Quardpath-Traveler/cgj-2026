@@ -4,6 +4,7 @@ extends Node
 
 var tutorial_completed: bool = false
 var current_level_index: int = 0
+var last_played_index: int = 0
 
 
 func _ready() -> void:
@@ -12,7 +13,10 @@ func _ready() -> void:
 
 ## 主菜单开始新游戏时调用：根据教程完成状态决定起始关卡
 func start_new_game() -> void:
-	current_level_index = 1 if tutorial_completed else 0
+	if not tutorial_completed:
+		current_level_index = 0
+	else:
+		current_level_index = maxi(current_level_index, 1)
 
 
 ## 获取当前应加载的关卡场景
@@ -24,7 +28,17 @@ func get_current_level_packed() -> PackedScene:
 	return level_scenes[safe_index]
 
 
-## 关卡通关时调用：如果是教程则标记完成，不改 current_level_index（重试仍加载本关）
+## 关卡通关时调用：记录刚玩的关卡，推进 index，最后一关循环回非教程首关
 func on_level_completed() -> void:
+	last_played_index = current_level_index
 	if current_level_index == 0:
 		tutorial_completed = true
+	var next_index := current_level_index + 1
+	if next_index >= level_scenes.size():
+		next_index = 1 if (tutorial_completed and level_scenes.size() > 1) else 0
+	current_level_index = next_index
+
+
+## 重试：回退到刚通关的关卡
+func retry_last_played() -> void:
+	current_level_index = last_played_index
