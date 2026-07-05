@@ -16,6 +16,7 @@ const STREAM_BUTTON_CLICK := preload("res://assets/audio/button_click.mp3")
 const STREAM_START_GAME := preload("res://assets/audio/start_game.mp3")
 const STREAM_TRANSITION := preload("res://assets/audio/transition.mp3")
 const STREAM_BACKGROUND_MUSIC := preload("res://assets/audio/background_music.mp3")
+const STREAM_SCREAM := preload("res://assets/audio/scream2.mp3")
 
 const SFX_POOL_SIZE := 4
 const MUSIC_FADE_IN_SECONDS := 1.0
@@ -113,6 +114,10 @@ func play_start_game() -> void:
 
 func play_transition() -> void:
 	_play_sfx(STREAM_TRANSITION)
+
+
+func play_scream() -> void:
+	_play_sfx(STREAM_SCREAM)
 
 
 func play_music() -> void:

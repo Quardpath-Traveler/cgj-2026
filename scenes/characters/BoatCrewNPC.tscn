@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cywnd16lua8um"]
 
 [ext_resource type="Texture2D" uid="uid://hksw5ao11y1i" path="res://assets/art/Character Art Assets/Protagonist Assets/npc.png" id="1_npc"]
 
-[node name="BoatCrewNPC" type="Node2D"]
+[node name="BoatCrewNPC" type="Node2D" unique_id=1656842665]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1430560117]
 position = Vector2(0, -33)
 scale = Vector2(0.303719, 0.303719)
 texture = ExtResource("1_npc")
