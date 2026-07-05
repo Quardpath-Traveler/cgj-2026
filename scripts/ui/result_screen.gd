@@ -10,6 +10,8 @@ const _RETRY_NORMAL := preload("res://assets/art/UI/result_screen/restart.png")
 const _RETRY_HOVER := preload("res://assets/art/UI/result_screen/restart_press.png")
 const _MAIN_MENU_NORMAL := preload("res://assets/art/UI/result_screen/back_to_main_menu.png")
 const _MAIN_MENU_HOVER := preload("res://assets/art/UI/result_screen/back_to_main_menu_press.png")
+const _NEXT_LEVEL_NORMAL := preload("res://assets/art/UI/result_screen/next_level.png")
+const _NEXT_LEVEL_HOVER := preload("res://assets/art/UI/result_screen/next_level_press.png")
 
 @onready var panel: TextureRect = %Panel
 @onready var character_avatar: TextureRect = %CharacterAvatar
@@ -19,17 +21,23 @@ const _MAIN_MENU_HOVER := preload("res://assets/art/UI/result_screen/back_to_mai
 @onready var rescued_label: Label = %RescuedLabel
 @onready var rescue_info_label: Label = %RescueInfoLabel
 @onready var retry_button: Button = %RetryButton
+@onready var next_level_button: Button = %NextLevelButton
 @onready var main_menu_button: Button = %MainMenuButton
 
 
 func _ready() -> void:
 	retry_button.pressed.connect(_on_retry_button_pressed)
+	next_level_button.pressed.connect(_on_next_level_button_pressed)
 	main_menu_button.pressed.connect(_on_main_menu_button_pressed)
 	GameState.score_changed.connect(_on_score_changed)
 	GameState.coin_changed.connect(_on_coin_changed)
 	GameState.rescued_changed.connect(_on_rescued_changed)
 	_setup_button_hover(retry_button, "RetryIcon", _RETRY_NORMAL, _RETRY_HOVER)
+	_setup_button_hover(next_level_button, "NextLevelIcon", _NEXT_LEVEL_NORMAL, _NEXT_LEVEL_HOVER)
 	_setup_button_hover(main_menu_button, "TextureRect", _MAIN_MENU_NORMAL, _MAIN_MENU_HOVER)
+	# 最后一关通关后没有下一关，隐藏下一关按钮
+	if not LevelManager.has_next_level():
+		next_level_button.visible = false
 	_on_score_changed(GameState.score)
 	_on_coin_changed(GameState.coin)
 	_on_rescued_changed(GameState.rescued_count, GameState.rescued_target)
@@ -88,6 +96,11 @@ func _update_result_images(count: int, target: int) -> void:
 
 func _on_retry_button_pressed() -> void:
 	LevelManager.retry_last_played()
+	EventBus.scene_transition_requested.emit("res://scenes/game/Game.tscn")
+
+
+func _on_next_level_button_pressed() -> void:
+	# current_level_index 已在 on_level_completed() 中推进到下一关，直接加载
 	EventBus.scene_transition_requested.emit("res://scenes/game/Game.tscn")
 
 
