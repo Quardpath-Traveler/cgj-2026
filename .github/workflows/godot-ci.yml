@@ -1,0 +1,184 @@
+name: Godot CI/CD
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "code/**"
+      - "design/**"
+      - "art/**"
+      - "audio/**"
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+concurrency:
+  group: godot-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: "4.7"
+  GODOT_STATUS: stable
+  GODOT_RELEASE: 4.7-stable
+  GODOT_BINARY: Godot_v4.7-stable_linux.x86_64
+  GODOT_TEMPLATES_DIR: 4.7.stable
+  WINDOWS_EXPORT_PRESET: Windows Desktop
+  WINDOWS_BUILD_NAME: anchor-cant-hold-windows-x86_64
+
+jobs:
+  validate:
+    name: Import and smoke test
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            ca-certificates \
+            curl \
+            unzip \
+            libfontconfig1 \
+            libgl1 \
+            libxcursor1 \
+            libxi6 \
+            libxinerama1 \
+            libxrandr2 \
+            libxrender1
+
+      - name: Cache Godot editor
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/godot-ci/${{ env.GODOT_RELEASE }}
+          key: godot-editor-${{ runner.os }}-${{ env.GODOT_RELEASE }}
+
+      - name: Install Godot editor
+        run: |
+          set -euo pipefail
+          GODOT_CACHE="$HOME/.cache/godot-ci/${GODOT_RELEASE}"
+          GODOT_URL="https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/${GODOT_BINARY}.zip"
+
+          mkdir -p "$GODOT_CACHE"
+          if [ ! -x "$GODOT_CACHE/godot" ]; then
+            curl --fail --location --retry 3 --output "$GODOT_CACHE/godot.zip" "$GODOT_URL"
+            unzip -o "$GODOT_CACHE/godot.zip" -d "$GODOT_CACHE"
+            mv "$GODOT_CACHE/$GODOT_BINARY" "$GODOT_CACHE/godot"
+            chmod +x "$GODOT_CACHE/godot"
+          fi
+
+          echo "$GODOT_CACHE" >> "$GITHUB_PATH"
+          "$GODOT_CACHE/godot" --version
+
+      - name: Import project assets
+        run: godot --headless --path . --import
+
+      - name: Run headless smoke test
+        run: godot --headless --path . --quit-after 1
+
+  export-windows:
+    name: Export Windows build
+    runs-on: ubuntu-24.04
+    needs: validate
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            ca-certificates \
+            curl \
+            unzip \
+            zip \
+            libfontconfig1 \
+            libgl1 \
+            libxcursor1 \
+            libxi6 \
+            libxinerama1 \
+            libxrandr2 \
+            libxrender1
+
+      - name: Cache Godot editor and export templates
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/godot-ci/${{ env.GODOT_RELEASE }}
+            ~/.local/share/godot/export_templates/${{ env.GODOT_TEMPLATES_DIR }}
+          key: godot-export-${{ runner.os }}-${{ env.GODOT_RELEASE }}
+
+      - name: Install Godot editor
+        run: |
+          set -euo pipefail
+          GODOT_CACHE="$HOME/.cache/godot-ci/${GODOT_RELEASE}"
+          GODOT_URL="https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/${GODOT_BINARY}.zip"
+
+          mkdir -p "$GODOT_CACHE"
+          if [ ! -x "$GODOT_CACHE/godot" ]; then
+            curl --fail --location --retry 3 --output "$GODOT_CACHE/godot.zip" "$GODOT_URL"
+            unzip -o "$GODOT_CACHE/godot.zip" -d "$GODOT_CACHE"
+            mv "$GODOT_CACHE/$GODOT_BINARY" "$GODOT_CACHE/godot"
+            chmod +x "$GODOT_CACHE/godot"
+          fi
+
+          echo "$GODOT_CACHE" >> "$GITHUB_PATH"
+          "$GODOT_CACHE/godot" --version
+
+      - name: Install Godot export templates
+        run: |
+          set -euo pipefail
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${GODOT_TEMPLATES_DIR}"
+          TEMPLATES_URL="https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_export_templates.tpz"
+
+          if [ ! -f "$TEMPLATE_DIR/windows_release_x86_64.exe" ]; then
+            TMP_DIR="$(mktemp -d)"
+            mkdir -p "$TEMPLATE_DIR"
+            curl --fail --location --retry 3 --output "$TMP_DIR/export_templates.tpz" "$TEMPLATES_URL"
+            unzip -o "$TMP_DIR/export_templates.tpz" -d "$TMP_DIR"
+            cp -R "$TMP_DIR/templates/." "$TEMPLATE_DIR/"
+          fi
+
+      - name: Import project assets
+        run: godot --headless --path . --import
+
+      - name: Export Windows release
+        run: |
+          set -euo pipefail
+          mkdir -p build/windows
+          godot --headless --path . --export-release "$WINDOWS_EXPORT_PRESET" "build/windows/${WINDOWS_BUILD_NAME}.exe"
+          (cd build/windows && zip -r "../${WINDOWS_BUILD_NAME}.zip" .)
+
+      - name: Upload Windows build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.WINDOWS_BUILD_NAME }}
+          path: build/${{ env.WINDOWS_BUILD_NAME }}.zip
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          ARTIFACT="build/${WINDOWS_BUILD_NAME}.zip"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ARTIFACT" --clobber
+          else
+            gh release create "$TAG" "$ARTIFACT" \
+              --title "$TAG" \
+              --notes "Automated Godot ${GODOT_RELEASE} Windows build for ${GITHUB_SHA}."
+          fi
